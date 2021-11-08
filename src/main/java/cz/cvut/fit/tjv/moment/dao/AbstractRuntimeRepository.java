@@ -1,16 +1,18 @@
 package cz.cvut.fit.tjv.moment.dao;
 
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 /**
- * Common superclass for persistence of all entities supporting operations Create, Read, Update, Delete; this class is backed by file.
+ * Common superclass for persistence of all entities supporting operations Create, Read, Update, Delete.
  *
  * @param <K> Type of (primary) key.
  * @param <E> Type of entity
  */
 
-//todo used to be abstract
 public abstract class AbstractRuntimeRepository<K, E> implements CrudRepository<K, E> {
 
     protected final Map<K, E> data = new HashMap<>();

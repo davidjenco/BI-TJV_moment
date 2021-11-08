@@ -2,12 +2,10 @@ package cz.cvut.fit.tjv.moment.api.converter;
 
 import cz.cvut.fit.tjv.moment.api.dtos.OrderDto;
 import cz.cvut.fit.tjv.moment.domain.Order;
-import org.aspectj.weaver.ast.Or;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 public class OrderConverter {
 
@@ -20,7 +18,7 @@ public class OrderConverter {
     }
 
     public static Collection<Order> toDomainMany(Collection<OrderDto> orderDtos) {
-        Collection<Order> orders = new ArrayList<>(); //TODO HashSet?
+        Collection<Order> orders = new ArrayList<>();
         orderDtos.forEach((u) -> orders.add(toDomain(u)));
         return orders;
     }

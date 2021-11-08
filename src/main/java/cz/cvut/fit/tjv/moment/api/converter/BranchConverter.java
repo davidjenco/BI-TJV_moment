@@ -13,7 +13,7 @@ public class BranchConverter {
         return new Branch(branchDto.id, branchDto.sales, branchDto.luckyNum, new HashSet<>(OrderConverter.toDomainMany(branchDto.orders)));
     }
 
-    public static BranchDto fromDomain(Branch branch){ //todo cast tady
+    public static BranchDto fromDomain(Branch branch){
         return new BranchDto(branch.getId(), branch.getSales(), branch.getLuckyNum(), OrderConverter.fromDomainMany(branch.getOrders()));
     }
 

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
-//todo dodělat change na Order - možná to napsat znovu celé
 
 @RestController
 public class OrderController {

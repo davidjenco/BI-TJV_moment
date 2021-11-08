@@ -17,7 +17,7 @@ public class OrderDto {
     public LocalDate date;
 
     @JsonView(Views.Detailed.class)
-    public Collection<MenuItemDto> orderItems; //int here is an amount --> maybe will be replaced in database
+    public Collection<MenuItemDto> orderItems;
 
     @JsonView(Views.Detailed.class)
     public boolean shouldCheckCustomerAge;

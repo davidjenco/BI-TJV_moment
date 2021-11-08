@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Branch {
-    private final int id;
+    private final int id; //todo change to long
     private double sales;
     private int luckyNum;
     private final Set<Order> orders;

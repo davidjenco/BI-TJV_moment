@@ -1,14 +1,12 @@
 package cz.cvut.fit.tjv.moment.api.dtos;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import cz.cvut.fit.tjv.moment.domain.Order;
 
 import java.util.Collection;
 import java.util.Set;
 
 public class BranchDto {
 
-    //todo tady psát anotace a specifikaci JSONView, popř. JSONFormat, JSONIgnore...
     @JsonView(Views.OverView.class)
     public int id;
 
@@ -24,7 +22,6 @@ public class BranchDto {
     public BranchDto (){ //je potřeba, jinak zlobí json
     }
 
-    //todo neměl by tady být Set<OrderDto>?
     public BranchDto(int id, double sales, int luckyNum, Collection<OrderDto> orders) {
         this.id = id;
         this.sales = sales;
