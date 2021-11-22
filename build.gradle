@@ -14,8 +14,13 @@ repositories {
     mavenCentral() //tady jsou všechny ty knihovny, které stahujeme
 }
 
+test{
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web' //nemusím uvádět verzi --> o to se mi postará spring framework
+    implementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'org.hsqldb:hsqldb'
 }
