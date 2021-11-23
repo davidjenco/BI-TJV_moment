@@ -1,6 +1,7 @@
 package cz.cvut.fit.tjv.moment.business;
 
 import cz.cvut.fit.tjv.moment.dao.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;
@@ -16,9 +17,9 @@ public abstract class AbstractCrudService<K, E> {
     /**
      * Reference to data (persistence) layer.
      */
-    protected final CrudRepository<K, E> repository;
+    protected final JpaRepository<E, K> repository;
 
-    protected AbstractCrudService(CrudRepository<K, E> repository) {
+    protected AbstractCrudService(JpaRepository<E, K> repository) {
         this.repository = repository;
     }
 

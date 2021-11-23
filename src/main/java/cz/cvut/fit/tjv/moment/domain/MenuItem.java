@@ -1,17 +1,28 @@
 package cz.cvut.fit.tjv.moment.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
 public class MenuItem {
-    private final int id;
-    private final String name;
-    private final int price;
-    private final boolean alcoholic;
-    private final Set<Order> ordersContainingSuchItem;
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String name;
+    private int price;
+    private boolean alcoholic;
+    @OneToMany(mappedBy = "menuItem")
+    private Set<OrderItemAmount> ordersContainingSuchItem;
 
-    protected MenuItem(int id, String name, int price) {
+    public MenuItem() {
+    }
+
+    protected MenuItem(Long id, String name, int price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -19,7 +30,7 @@ public class MenuItem {
         ordersContainingSuchItem = new HashSet<>();
     }
 
-    public MenuItem(int id, String name, int price, boolean alcoholic, Set<Order> ordersContainingSuchItem) {
+    public MenuItem(Long id, String name, int price, boolean alcoholic, Set<OrderItemAmount> ordersContainingSuchItem) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -27,7 +38,7 @@ public class MenuItem {
         this.ordersContainingSuchItem = ordersContainingSuchItem;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -39,12 +50,32 @@ public class MenuItem {
         return price;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public boolean isAlcoholic() {
         return alcoholic;
     }
 
-    public Set<Order> getOrdersContainingSuchItem() {
+    public Set<OrderItemAmount> getOrdersContainingSuchItem() {
         return ordersContainingSuchItem;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setAlcoholic(boolean alcoholic) {
+        this.alcoholic = alcoholic;
+    }
+
+    public void setOrdersContainingSuchItem(Set<OrderItemAmount> ordersContainingSuchItem) {
+        this.ordersContainingSuchItem = ordersContainingSuchItem;
     }
 
     @Override
@@ -52,7 +83,7 @@ public class MenuItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MenuItem menuItem = (MenuItem) o;
-        return getId() == menuItem.getId();
+        return Objects.equals(getId(), menuItem.getId());
     }
 
     @Override

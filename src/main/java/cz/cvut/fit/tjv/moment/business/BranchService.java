@@ -1,5 +1,6 @@
 package cz.cvut.fit.tjv.moment.business;
 
+import cz.cvut.fit.tjv.moment.dao.BranchJpaRepository;
 import cz.cvut.fit.tjv.moment.dao.BranchRuntimeRepository;
 import cz.cvut.fit.tjv.moment.domain.Branch;
 import cz.cvut.fit.tjv.moment.domain.Order;
@@ -12,7 +13,7 @@ public class BranchService extends AbstractCrudService<Integer, Branch>{
 
     private final OrderService orderService;
 
-    protected BranchService(BranchRuntimeRepository repository, OrderService orderService) {
+    protected BranchService(BranchJpaRepository repository, OrderService orderService) {
         super(repository);
         this.orderService = orderService;
     }
