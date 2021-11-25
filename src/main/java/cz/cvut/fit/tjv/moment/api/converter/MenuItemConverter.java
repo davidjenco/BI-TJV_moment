@@ -10,11 +10,11 @@ import java.util.HashSet;
 public class MenuItemConverter {
 
     public static MenuItem toDomain(MenuItemDto menuItemDto){
-        return new MenuItem(menuItemDto.getId(), menuItemDto.name, menuItemDto.price, menuItemDto.alcoholic, new HashSet<>(OrderConverter.toDomainMany(menuItemDto.ordersContainingSuchItem)));
+        return new MenuItem(menuItemDto.getId(), menuItemDto.name, menuItemDto.price, menuItemDto.alcoholic, new HashSet<>(OrderItemConverter.toDomainMany(menuItemDto.orderItemDtos, null, menuItemDto.id)));
     }
 
     public static MenuItemDto fromDomain(MenuItem menuItem){
-        return new MenuItemDto(menuItem.getId(), menuItem.getName(), menuItem.getPrice(), menuItem.isAlcoholic(), OrderConverter.fromDomainMany(menuItem.getOrdersContainingSuchItem()));
+        return new MenuItemDto(menuItem.getId(), menuItem.getName(), menuItem.getPrice(), menuItem.isAlcoholic(), OrderItemConverter.fromDomainMany(menuItem.getOrdersContainingSuchItem(), false));
     }
 
     public static Collection<MenuItem> toDomainMany(Collection<MenuItemDto> menuItemDtos) {

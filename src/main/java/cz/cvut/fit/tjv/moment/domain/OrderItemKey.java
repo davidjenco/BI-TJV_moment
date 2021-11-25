@@ -6,17 +6,17 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class OrderItemAmountKey implements Serializable {
+public class OrderItemKey implements Serializable {
     @Column(name = "order_id")
     Long orderId;
 
     @Column(name = "menu_item_id")
     Long menuItemId;
 
-    public OrderItemAmountKey() {
+    public OrderItemKey() {
     }
 
-    public OrderItemAmountKey(Long orderId, Long menuItemId) {
+    public OrderItemKey(Long orderId, Long menuItemId) {
         this.orderId = orderId;
         this.menuItemId = menuItemId;
     }
@@ -41,7 +41,7 @@ public class OrderItemAmountKey implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrderItemAmountKey that = (OrderItemAmountKey) o;
+        OrderItemKey that = (OrderItemKey) o;
         return Objects.equals(getOrderId(), that.getOrderId()) && Objects.equals(getMenuItemId(), that.getMenuItemId());
     }
 

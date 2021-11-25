@@ -15,9 +15,10 @@ public class Order {
     @ManyToOne
     private Branch branch;
     @OneToMany(mappedBy = "order")
-    private Set<OrderItemAmount> orderItems;
+    private Set<OrderItem> orderItems;
     private boolean shouldCheckCustomerAge;
-    private OrderState orderState = OrderState.CLOSED;
+    private OrderState orderState = OrderState.OPEN;
+    private boolean isFree = false;
 
     public Order() {
     }
@@ -30,16 +31,18 @@ public class Order {
         shouldCheckCustomerAge = false;
     }
 
-    public Order(Long id, LocalDate date, Branch branch, Set<OrderItemAmount> orderItems, boolean shouldCheckCustomerAge, OrderState orderState) {
+
+    public Order(Long id, LocalDate date, Branch branch, Set<OrderItem> orderItems, boolean shouldCheckCustomerAge, OrderState orderState, boolean isFree) {
         this.id = id;
         this.date = date;
         this.branch = branch;
         this.orderItems = orderItems;
         this.shouldCheckCustomerAge = shouldCheckCustomerAge;
         this.orderState = orderState;
+        this.isFree = isFree;
     }
 
-    public void addItem(OrderItemAmount item){
+    public void addItem(OrderItem item){
         orderItems.add(item);
     }
 
@@ -55,7 +58,7 @@ public class Order {
         return branch;
     }
 
-    public Set<OrderItemAmount> getOrderItems() {
+    public Set<OrderItem> getOrderItems() {
         return orderItems;
     }
 
@@ -65,6 +68,10 @@ public class Order {
 
     public OrderState getOrderState() {
         return orderState;
+    }
+
+    public boolean isFree() {
+        return isFree;
     }
 
     public void setId(Long id) {
@@ -79,7 +86,7 @@ public class Order {
         this.branch = branch;
     }
 
-    public void setOrderItems(Set<OrderItemAmount> orderItems) {
+    public void setOrderItems(Set<OrderItem> orderItems) {
         this.orderItems = orderItems;
     }
 
@@ -89,6 +96,10 @@ public class Order {
 
     public void setOrderState(OrderState orderState) {
         this.orderState = orderState;
+    }
+
+    public void setFree(boolean free) {
+        isFree = free;
     }
 
     @Override
@@ -109,9 +120,11 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", date=" + date +
+                ", branch=" + branch +
                 ", orderItems=" + orderItems +
                 ", shouldCheckCustomerAge=" + shouldCheckCustomerAge +
                 ", orderState=" + orderState +
+                ", isFree=" + isFree +
                 '}';
     }
 }

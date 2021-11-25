@@ -1,6 +1,8 @@
 package cz.cvut.fit.tjv.moment.api.controller;
 
+import cz.cvut.fit.tjv.moment.business.CheckCustomerAgeWarningException;
 import cz.cvut.fit.tjv.moment.business.ElementAlreadyExistsException;
+import cz.cvut.fit.tjv.moment.business.LuckyWinException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +32,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<?> handleNullPointer(Exception e, WebRequest webRequest){
         String bodyOfResponse = "Wrong data structure";
         return handleExceptionInternal(e, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
+    }
+
+    @ExceptionHandler(CheckCustomerAgeWarningException.class)
+    protected ResponseEntity<?> handleCustomerAgeCheck(Exception e, WebRequest webRequest){
+        String bodyOfResponse = "You should check, whether customer is old enough.";
+        return handleExceptionInternal(e, bodyOfResponse, new HttpHeaders(), HttpStatus.OK, webRequest);
+    }
+
+    @ExceptionHandler(LuckyWinException.class)
+    protected ResponseEntity<?> handleWinnerNotification(Exception e, WebRequest webRequest){
+        String bodyOfResponse = "Customer hit lucky number: order is free of charge!";
+        return handleExceptionInternal(e, bodyOfResponse, new HttpHeaders(), HttpStatus.OK, webRequest);
     }
 }

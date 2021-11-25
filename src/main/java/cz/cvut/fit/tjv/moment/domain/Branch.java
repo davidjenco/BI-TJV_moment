@@ -68,7 +68,7 @@ public class Branch {
         this.orders = orders;
     }
 
-    void updateLuckyNum(){
+    public void updateLuckyNum(){
         luckyNum = ThreadLocalRandom.current().nextInt(100, 200 + 1); //todo nahradit za resources
     }
 

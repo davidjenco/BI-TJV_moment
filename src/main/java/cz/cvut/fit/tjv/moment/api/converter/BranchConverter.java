@@ -10,11 +10,11 @@ import java.util.HashSet;
 public class BranchConverter {
 
     public static Branch toDomain(BranchDto branchDto){
-        return new Branch(branchDto.id, branchDto.sales, branchDto.luckyNum, new HashSet<>(OrderConverter.toDomainMany(branchDto.orders)));
+        return new Branch(branchDto.id, branchDto.sales, branchDto.luckyNum, new HashSet<>(OrderConverter.toDomainMany(branchDto.ordersIds)));
     }
 
     public static BranchDto fromDomain(Branch branch){
-        return new BranchDto(branch.getId(), branch.getSales(), branch.getLuckyNum(), OrderConverter.fromDomainMany(branch.getOrders()));
+        return new BranchDto(branch.getId(), branch.getSales(), branch.getLuckyNum(), OrderConverter.fromDomainToIdsMany(branch.getOrders()));
     }
 
     public static Collection<Branch> toDomainMany(Collection<BranchDto> branchDtos) {

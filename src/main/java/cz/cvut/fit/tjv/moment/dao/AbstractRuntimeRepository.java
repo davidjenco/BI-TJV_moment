@@ -18,15 +18,15 @@ public abstract class AbstractRuntimeRepository<K, E> implements CrudRepository<
     protected final Map<K, E> data = new HashMap<>();
 
     @Override
-    public abstract void create(E entity);
+    public abstract E save(E entity);
 
     @Override
-    public Optional<E> readById(K id) {
+    public Optional<E> findById(K id) {
         return Optional.ofNullable(data.get(id));
     }
 
     @Override
-    public Collection<E> readAll() {
+    public Collection<E> findAll() {
         return data.values();
     }
 

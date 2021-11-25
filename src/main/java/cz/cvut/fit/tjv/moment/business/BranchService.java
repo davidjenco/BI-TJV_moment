@@ -1,51 +1,40 @@
 package cz.cvut.fit.tjv.moment.business;
 
 import cz.cvut.fit.tjv.moment.dao.BranchJpaRepository;
-import cz.cvut.fit.tjv.moment.dao.BranchRuntimeRepository;
 import cz.cvut.fit.tjv.moment.domain.Branch;
 import cz.cvut.fit.tjv.moment.domain.Order;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import javax.transaction.Transactional;
 
 @Component
-public class BranchService extends AbstractCrudService<Integer, Branch>{
-
-    private final OrderService orderService;
+@Transactional
+public class BranchService extends AbstractCrudService<Long, Branch>{
 
     protected BranchService(BranchJpaRepository repository, OrderService orderService) {
         super(repository);
-        this.orderService = orderService;
     }
 
-    public void complementOrder(int branchId, int orderId){
-        Optional<Branch> optBranch = readById(branchId);
-        Optional<Order> optOrder = orderService.readById(orderId);
+    public Order complementOrder(Order order, double totalPrice) throws CheckCustomerAgeWarningException, LuckyWinException {
 
-        Branch branch = optBranch.orElseThrow();
-        Order order = optOrder.orElseThrow();
+        Branch branch = order.getBranch();
 
-//        Order hm = branch.getOrderById(); //todo?? in Branch class
+        if (order.shouldCheckCustomerAge()){
+            throw new CheckCustomerAgeWarningException();
+        }
 
-//        if (order.getOrderState() == OrderState.OPEN){
-//            if (branch.getLuckyNum() == order.getTotalPrice()){
-//                if (order.shouldCheckCustomerAge()){
-//                    //todo
-//                }
-////            branch.addSales(0); //free order, if lucky num was hit
-//                order.setOrderState(OrderState.CLOSED);
-//            }else{
-//                if (order.shouldCheckCustomerAge()){
-//                    //todo
-//                }
-//                branch.addSales(order.getTotalPrice());
-//            }
-//            order.setOrderState(OrderState.CLOSED);
-//        }
-//        else{
-//            //todo throw
-//        }
+        order.setFree(branch.getLuckyNum() == totalPrice); //free order, if lucky num was hit
+        if (order.isFree())
+            throw new LuckyWinException();
 
-            update(branch);
+        branch.updateLuckyNum();
+        update(branch);
+
+        return order;
+    }
+
+    @Override
+    public boolean exists(Branch entity) {
+        return repository.existsById(entity.getId());
     }
 }

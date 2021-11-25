@@ -1,6 +1,5 @@
 package cz.cvut.fit.tjv.moment.business;
 
-import cz.cvut.fit.tjv.moment.dao.CrudRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
@@ -28,18 +27,21 @@ public abstract class AbstractCrudService<K, E> {
      *
      * @param entity entity to be stored
      */
+
+    public abstract boolean exists(E entity);
+
     public void create(E entity) throws ElementAlreadyExistsException {
-        if (repository.exists(entity))
+        if (exists(entity))
             throw new ElementAlreadyExistsException();
-        repository.create(entity); //delegate call to data layer
+        repository.save(entity);
     }
 
     public Optional<E> readById(K id) {
-        return repository.readById(id);
+        return repository.findById(id);
     }
 
     public Collection<E> readAll() {
-        return repository.readAll();
+        return repository.findAll();
     }
 
     /**
@@ -47,9 +49,9 @@ public abstract class AbstractCrudService<K, E> {
      *
      * @param entity the new state of the entity to be updated; the instance must contain a key value
      */
-    public void update(E entity){
-        if (repository.exists(entity)) {
-            repository.update(entity);
+    public void update(E entity) throws CheckCustomerAgeWarningException {
+        if (exists(entity)) {
+            repository.save(entity);
         }
         else {
             throw new NoSuchElementException("No such element to update.");

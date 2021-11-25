@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderRuntimeRepository extends AbstractRuntimeRepository<Integer, Order> {
     @Override
-    public void create(Order entity) {
+    public Order save(Order entity) {
         data.put(entity.getId(), entity);
     }
 

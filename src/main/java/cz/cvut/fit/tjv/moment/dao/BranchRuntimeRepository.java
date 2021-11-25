@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BranchRuntimeRepository extends AbstractRuntimeRepository<Integer, Branch> {
     @Override
-    public void create(Branch entity) {
+    public Branch save(Branch entity) {
         data.put(entity.getId(), entity);
     }
 

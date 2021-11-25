@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MenuItemRuntimeRepository extends AbstractRuntimeRepository<Integer, MenuItem> {
     @Override
-    public void create(MenuItem entity) {
+    public MenuItem save(MenuItem entity) {
         data.put(entity.getId(), entity);
     }
 

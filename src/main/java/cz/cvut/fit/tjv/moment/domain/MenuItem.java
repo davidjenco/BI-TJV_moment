@@ -17,7 +17,7 @@ public class MenuItem {
     private int price;
     private boolean alcoholic;
     @OneToMany(mappedBy = "menuItem")
-    private Set<OrderItemAmount> ordersContainingSuchItem;
+    private Set<OrderItem> ordersContainingSuchItem;
 
     public MenuItem() {
     }
@@ -30,7 +30,7 @@ public class MenuItem {
         ordersContainingSuchItem = new HashSet<>();
     }
 
-    public MenuItem(Long id, String name, int price, boolean alcoholic, Set<OrderItemAmount> ordersContainingSuchItem) {
+    public MenuItem(Long id, String name, int price, boolean alcoholic, Set<OrderItem> ordersContainingSuchItem) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -58,7 +58,7 @@ public class MenuItem {
         return alcoholic;
     }
 
-    public Set<OrderItemAmount> getOrdersContainingSuchItem() {
+    public Set<OrderItem> getOrdersContainingSuchItem() {
         return ordersContainingSuchItem;
     }
 
@@ -74,7 +74,7 @@ public class MenuItem {
         this.alcoholic = alcoholic;
     }
 
-    public void setOrdersContainingSuchItem(Set<OrderItemAmount> ordersContainingSuchItem) {
+    public void setOrdersContainingSuchItem(Set<OrderItem> ordersContainingSuchItem) {
         this.ordersContainingSuchItem = ordersContainingSuchItem;
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import cz.cvut.fit.tjv.moment.api.converter.MenuItemConverter;
 import cz.cvut.fit.tjv.moment.api.dtos.MenuItemDto;
 import cz.cvut.fit.tjv.moment.api.dtos.Views;
+import cz.cvut.fit.tjv.moment.business.CheckCustomerAgeWarningException;
 import cz.cvut.fit.tjv.moment.business.ElementAlreadyExistsException;
 import cz.cvut.fit.tjv.moment.business.MenuItemService;
 import cz.cvut.fit.tjv.moment.domain.MenuItem;
@@ -28,7 +29,7 @@ public class MenuItemController {
 
     @JsonView(Views.Detailed.class)
     @GetMapping("/menuItems/{id}")
-    MenuItemDto readOne(@PathVariable Integer id){
+    MenuItemDto readOne(@PathVariable Long id){
         MenuItem menuItemFromDB = menuItemService.readById(id).orElseThrow();
         return MenuItemConverter.fromDomain(menuItemFromDB);
     }
@@ -40,7 +41,7 @@ public class MenuItemController {
     }
 
     @PutMapping("/menuItems/{id}")
-    MenuItemDto updateMenuItem(@RequestBody MenuItemDto menuItemDto, @PathVariable Integer id){
+    MenuItemDto updateMenuItem(@RequestBody MenuItemDto menuItemDto, @PathVariable Long id) throws CheckCustomerAgeWarningException {
         menuItemService.readById(id).orElseThrow();
         MenuItem menuItemDomain = MenuItemConverter.toDomain(menuItemDto);
         menuItemService.update(menuItemDomain);
@@ -49,7 +50,7 @@ public class MenuItemController {
     }
 
     @DeleteMapping("/menuItems/{id}")
-    void deleteMenuItem(@PathVariable Integer id){
+    void deleteMenuItem(@PathVariable Long id){
         menuItemService.deleteById(id);
     }
 }

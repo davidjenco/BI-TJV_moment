@@ -6,6 +6,7 @@ import cz.cvut.fit.tjv.moment.api.dtos.BranchDto;
 import cz.cvut.fit.tjv.moment.api.dtos.OrderDto;
 import cz.cvut.fit.tjv.moment.api.dtos.Views;
 import cz.cvut.fit.tjv.moment.business.BranchService;
+import cz.cvut.fit.tjv.moment.business.CheckCustomerAgeWarningException;
 import cz.cvut.fit.tjv.moment.business.ElementAlreadyExistsException;
 import cz.cvut.fit.tjv.moment.domain.Branch;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class BranchController {
 
     @JsonView(Views.Detailed.class)
     @GetMapping("/branches/{id}")
-    BranchDto readOne(@PathVariable Integer id){ //díky tomu PathVariable Spring rozparsuje tu adresu a vezme z ní to id ({id}), které chceme
+    BranchDto readOne(@PathVariable Long id){ //díky tomu PathVariable Spring rozparsuje tu adresu a vezme z ní to id ({id}), které chceme
         Branch branchFromDB = branchService.readById(id).orElseThrow();
         return BranchConverter.fromDomain(branchFromDB);
     }
@@ -47,7 +48,7 @@ public class BranchController {
     }
 
     @PutMapping("/branches/{id}")
-    BranchDto updateBranch(@RequestBody BranchDto branchDto, @PathVariable Integer id){
+    BranchDto updateBranch(@RequestBody BranchDto branchDto, @PathVariable Long id) throws CheckCustomerAgeWarningException {
         branchService.readById(id).orElseThrow();
         Branch branchDomain = BranchConverter.toDomain(branchDto);
         branchService.update(branchDomain);
@@ -56,18 +57,17 @@ public class BranchController {
     }
 
     @DeleteMapping("/branches/{id}")
-    void deleteBranch(@PathVariable Integer id){
-
+    void deleteBranch(@PathVariable Long id){
         branchService.deleteById(id);
     }
 
     @PostMapping("/branches/{id}/orders")
-    BranchDto addOrder(@RequestBody OrderDto orderDto, @PathVariable Integer id) throws ElementAlreadyExistsException {
+    BranchDto addOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException {
         readOne(id);
         orderController.createOrder(orderDto);
 
         BranchDto branch = readOne(id);
-        branch.addOrder(orderDto);
+        branch.addOrder(orderDto.id);
         updateBranch(branch, id);
 
         return branch;

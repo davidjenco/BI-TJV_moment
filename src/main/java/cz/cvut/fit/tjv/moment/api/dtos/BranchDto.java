@@ -8,7 +8,7 @@ import java.util.Set;
 public class BranchDto {
 
     @JsonView(Views.OverView.class)
-    public int id;
+    public Long id;
 
     @JsonView(Views.OverView.class)
     public double sales;
@@ -17,20 +17,20 @@ public class BranchDto {
     public int luckyNum;
 
     @JsonView(Views.Detailed.class)
-    public Collection<OrderDto> orders;
+    public Collection<Long> ordersIds;
 
     public BranchDto (){ //je potřeba, jinak zlobí json
     }
 
-    public BranchDto(int id, double sales, int luckyNum, Collection<OrderDto> orders) {
+    public BranchDto(Long id, double sales, int luckyNum, Collection<Long> ordersIds) {
         this.id = id;
         this.sales = sales;
         this.luckyNum = luckyNum;
-        this.orders = orders;
+        this.ordersIds = ordersIds;
     }
 
     //gettery a settery jsou tady potřeba, protože pomocí nich ten JSON zkonstruuje, nebo to z něj zkonstruuje
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -42,11 +42,11 @@ public class BranchDto {
         return luckyNum;
     }
 
-    public Collection<OrderDto> getOrders() {
-        return orders;
+    public Collection<Long> getOrdersIds() {
+        return ordersIds;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -58,11 +58,11 @@ public class BranchDto {
         this.luckyNum = luckyNum;
     }
 
-    public void setOrders(Set<OrderDto> orders) {
-        this.orders = orders;
+    public void setOrdersIds(Set<Long> ordersIds) {
+        this.ordersIds = ordersIds;
     }
 
-    public void addOrder(OrderDto order){
-        orders.add(order);
+    public void addOrder(Long orderId){
+        ordersIds.add(orderId);
     }
 }

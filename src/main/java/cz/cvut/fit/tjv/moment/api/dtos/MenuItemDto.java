@@ -7,7 +7,7 @@ import java.util.Collection;
 public class MenuItemDto {
 
     @JsonView(Views.OverView.class)
-    public int id;
+    public Long id;
 
     @JsonView(Views.OverView.class)
     public String name;
@@ -19,20 +19,20 @@ public class MenuItemDto {
     public boolean alcoholic;
 
     @JsonView(Views.Detailed.class)
-    public Collection<OrderDto> ordersContainingSuchItem;
+    public Collection<OrderItemDto> orderItemDtos;
 
     public MenuItemDto() {
     }
 
-    public MenuItemDto(int id, String name, int price, boolean alcoholic, Collection<OrderDto> ordersContainingSuchItem) {
+    public MenuItemDto(Long id, String name, int price, boolean alcoholic, Collection<OrderItemDto> orderItemDtos) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.alcoholic = alcoholic;
-        this.ordersContainingSuchItem = ordersContainingSuchItem;
+        this.orderItemDtos = orderItemDtos;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -48,11 +48,11 @@ public class MenuItemDto {
         return alcoholic;
     }
 
-    public Collection<OrderDto> getOrdersContainingSuchItem() {
-        return ordersContainingSuchItem;
+    public Collection<OrderItemDto> getOrderItemDtos() {
+        return orderItemDtos;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -64,8 +64,8 @@ public class MenuItemDto {
         this.price = price;
     }
 
-    public void setOrdersContainingSuchItem(Collection<OrderDto> ordersContainingSuchItem) {
-        this.ordersContainingSuchItem = ordersContainingSuchItem;
+    public void setOrderItemDtos(Collection<OrderItemDto> orderItemDtos) {
+        this.orderItemDtos = orderItemDtos;
     }
 
     public void setAlcoholic(boolean alcoholic) {

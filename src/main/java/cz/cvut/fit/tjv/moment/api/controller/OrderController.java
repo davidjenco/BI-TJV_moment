@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import cz.cvut.fit.tjv.moment.api.converter.OrderConverter;
 import cz.cvut.fit.tjv.moment.api.dtos.OrderDto;
 import cz.cvut.fit.tjv.moment.api.dtos.Views;
+import cz.cvut.fit.tjv.moment.business.CheckCustomerAgeWarningException;
 import cz.cvut.fit.tjv.moment.business.ElementAlreadyExistsException;
 import cz.cvut.fit.tjv.moment.business.OrderService;
 import cz.cvut.fit.tjv.moment.domain.Order;
@@ -31,7 +32,7 @@ public class OrderController {
 
     @JsonView(Views.Detailed.class)
     @GetMapping("/orders/{id}")
-    OrderDto readOne(@PathVariable Integer id){
+    OrderDto readOne(@PathVariable Long id){
         Order orderFromDB = orderService.readById(id).orElseThrow();
         return OrderConverter.fromDomain(orderFromDB);
     }
@@ -43,7 +44,7 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{id}")
-    OrderDto updateOrder(@RequestBody OrderDto OrderDto, @PathVariable Integer id){
+    OrderDto updateOrder(@RequestBody OrderDto OrderDto, @PathVariable Long id) throws CheckCustomerAgeWarningException {
         orderService.readById(id).orElseThrow();
         Order orderDomain = OrderConverter.toDomain(OrderDto);
         orderService.update(orderDomain);
@@ -52,18 +53,18 @@ public class OrderController {
     }
 
     @DeleteMapping("/orders/{id}")
-    void deleteOrder(@PathVariable Integer id){
+    void deleteOrder(@PathVariable Long id){
         orderService.deleteById(id);
     }
 
     @PutMapping("/orders/{id}/orderItems/{itemId}")
-    OrderDto addOrderItem(@PathVariable Integer id, @PathVariable Integer itemId) throws ElementAlreadyExistsException {
+    OrderDto addOrderItem(@PathVariable Long id, @PathVariable Long itemId) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException {
         readOne(id);
         menuItemController.readOne(itemId);
 
         OrderDto order = readOne(id);
-        order.addOrderItem(menuItemController.readOne(itemId));
-        updateOrder(order, id);
+//        order.addOrderItem(menuItemController.readOne(itemId)); //TODO ještě poměnit...
+//        updateOrder(order, id);
 
         return order;
     }

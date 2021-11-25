@@ -3,9 +3,9 @@ package cz.cvut.fit.tjv.moment.domain;
 import javax.persistence.*;
 
 @Entity
-public class OrderItemAmount {
+public class OrderItem {
     @EmbeddedId
-    OrderItemAmountKey id;
+    OrderItemKey id;
 
     @ManyToOne
     @MapsId("orderId")
@@ -17,23 +17,23 @@ public class OrderItemAmount {
     @JoinColumn(name = "menu_item_id")
     MenuItem menuItem;
 
-    int rating;
+    int amount;
 
-    public OrderItemAmount() {
+    public OrderItem() {
     }
 
-    public OrderItemAmount(OrderItemAmountKey id, Order order, MenuItem menuItem, int rating) {
+    public OrderItem(OrderItemKey id, Order order, MenuItem menuItem, int amount) {
         this.id = id;
         this.order = order;
         this.menuItem = menuItem;
-        this.rating = rating;
+        this.amount = amount;
     }
 
-    public OrderItemAmountKey getId() {
+    public OrderItemKey getId() {
         return id;
     }
 
-    public void setId(OrderItemAmountKey id) {
+    public void setId(OrderItemKey id) {
         this.id = id;
     }
 
@@ -53,11 +53,15 @@ public class OrderItemAmount {
         this.menuItem = menuItem;
     }
 
-    public int getRating() {
-        return rating;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
+    public void setAmount(int rating) {
+        this.amount = rating;
+    }
+
+    public void increaseAmount(int rating) {
+        this.amount++;
     }
 }

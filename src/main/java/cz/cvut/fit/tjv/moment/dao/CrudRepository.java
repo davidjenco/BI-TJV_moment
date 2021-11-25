@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface CrudRepository<K, E> {
-    void create(E entity);
+    E save(E entity);
 
-    Optional<E> readById(K id);
+    Optional<E> findById(K id);
 
-    Collection<E> readAll();
+    Collection<E> findAll();
 
     void update(E entity);
 
