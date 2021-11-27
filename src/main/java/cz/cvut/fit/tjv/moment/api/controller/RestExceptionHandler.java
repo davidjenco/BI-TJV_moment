@@ -28,11 +28,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(e, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, webRequest);
     }
 
-//    @ExceptionHandler(NullPointerException.class)
-//    protected ResponseEntity<?> handleNullPointer(Exception e, WebRequest webRequest){
-//        String bodyOfResponse = "Wrong data structure";
-//        return handleExceptionInternal(e, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
-//    }
+    @ExceptionHandler(NullPointerException.class)
+    protected ResponseEntity<?> handleNullPointer(Exception e, WebRequest webRequest){
+        String bodyOfResponse = "Wrong data structure";
+        return handleExceptionInternal(e, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
+    }
 
     @ExceptionHandler(CheckCustomerAgeWarningException.class)
     protected ResponseEntity<?> handleCustomerAgeCheck(Exception e, WebRequest webRequest){

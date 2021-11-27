@@ -2,36 +2,42 @@ package cz.cvut.fit.tjv.moment.api.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import cz.cvut.fit.tjv.moment.api.converter.OrderConverter;
+import cz.cvut.fit.tjv.moment.api.converter.OrderItemConverter;
 import cz.cvut.fit.tjv.moment.api.dtos.OrderDto;
 import cz.cvut.fit.tjv.moment.api.dtos.Views;
 import cz.cvut.fit.tjv.moment.business.*;
-import cz.cvut.fit.tjv.moment.domain.Branch;
-import cz.cvut.fit.tjv.moment.domain.Order;
+import cz.cvut.fit.tjv.moment.domain.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Optional;
 
 
 @RestController
 public class OrderController {
     private final OrderService orderService;
     private final BranchService branchService;
+    private final OrderItemService orderItemService;
+    private final MenuItemService menuItemService;
     private final MenuItemController menuItemController;
     private final OrderConverter orderConverter;
+    private final OrderItemConverter orderItemConverter;
 
-    public OrderController(OrderService orderService, BranchService branchService, MenuItemController menuItemController, OrderConverter orderConverter) {
+    public OrderController(OrderService orderService, BranchService branchService, OrderItemService orderItemService, MenuItemService menuItemService, MenuItemController menuItemController, OrderConverter orderConverter, OrderItemConverter orderItemConverter) {
         this.orderService = orderService;
         this.branchService = branchService;
+        this.orderItemService = orderItemService;
+        this.menuItemService = menuItemService;
         this.menuItemController = menuItemController;
         this.orderConverter = orderConverter;
+        this.orderItemConverter = orderItemConverter;
     }
 
     @PostMapping("/orders")
     OrderDto createOrder(@RequestBody OrderDto orderDto) throws ElementAlreadyExistsException {
         Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
         Order orderDomain = orderConverter.toDomain(orderDto, branch);
-        Order returnedOrder = orderService.create(orderDomain);
-        orderDto.id = returnedOrder.getId();
+        orderService.create(orderDomain);
         return orderDto;
     }
 
@@ -63,15 +69,24 @@ public class OrderController {
         orderService.deleteById(id);
     }
 
-    @PutMapping("/orders/{id}/orderItems/{itemId}")
-    OrderDto addOrderItem(@PathVariable Long id, @PathVariable Long itemId) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException {
-        readOne(id);
-        menuItemController.readOne(itemId);
+    @PutMapping("/orders/{id}/orderItems/{itemId}/amount/{amount}")
+    OrderDto addOrderItem(@PathVariable Long id, @PathVariable Long itemId, @PathVariable Integer amount) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException {
+        Order order = orderService.readById(id).orElseThrow();
+        MenuItem menuItem = menuItemService.readById(itemId).orElseThrow();
 
-        OrderDto order = readOne(id);
-//        order.addOrderItem(menuItemController.readOne(itemId)); //TODO ještě poměnit...
-//        updateOrder(order, id);
+        Optional<OrderItem> orderItemOptional = orderItemService.readById(new OrderItemKey(id, itemId));
+        if (orderItemOptional.isPresent()){
+            orderItemOptional.get().increaseAmount(amount);
+        }else{
+            OrderItem orderItem = new OrderItem(new OrderItemKey(id, itemId), order, menuItem, amount);
+            orderItemService.create(orderItem);
+        }
 
-        return order;
+        return readOne(id);
+    }
+
+    @GetMapping("/ordersItems/wtf")
+    void wtf() {
+
     }
 }

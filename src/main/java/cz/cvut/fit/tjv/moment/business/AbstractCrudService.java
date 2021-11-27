@@ -30,12 +30,10 @@ public abstract class AbstractCrudService<K, E> {
 
     public abstract boolean exists(E entity);
 
-    public E create(E entity) throws ElementAlreadyExistsException {
+    public void create(E entity) throws ElementAlreadyExistsException {
         if (exists(entity))
             throw new ElementAlreadyExistsException();
         repository.save(entity);
-        repository.flush();
-        return entity;
     }
 
     public Optional<E> readById(K id) {

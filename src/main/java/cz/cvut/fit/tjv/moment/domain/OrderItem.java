@@ -61,7 +61,7 @@ public class OrderItem {
         this.amount = rating;
     }
 
-    public void increaseAmount(int rating) {
-        this.amount++;
+    public void increaseAmount(int amount) {
+        this.amount += amount;
     }
 }

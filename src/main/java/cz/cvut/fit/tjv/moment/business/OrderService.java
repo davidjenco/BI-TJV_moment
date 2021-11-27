@@ -33,6 +33,7 @@ public class OrderService extends AbstractCrudService<Long, Order>{
                 double totalPrice = 0;
 
                 //TODO získat totalPrice
+                //TODO select sum (select )
 
                 entity = branchService.complementOrder(entity, totalPrice);
                 repository.save(entity);

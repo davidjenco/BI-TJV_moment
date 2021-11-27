@@ -80,13 +80,7 @@ public class BranchController {
     BranchDto addOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException, LuckyWinException {
         orderDto.branchId = id; //branchId here must be equivalent to this branch id (in placeholder)
         readOne(id);
-        OrderDto returnedDto = orderController.createOrder(orderDto);
-        //Id = service find by value...
-
-        BranchDto branch = readOne(id);
-        branch.addOrder(returnedDto.id);
-        updateBranch(branch, id);
-
-        return branch;
+        orderController.createOrder(orderDto);
+        return readOne(id);
     }
 }
