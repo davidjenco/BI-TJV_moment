@@ -10,7 +10,7 @@ public class OrderItem {
     @ManyToOne
     @MapsId("orderId")
     @JoinColumn(name = "order_id")
-    Order order;
+    Order myOrder;
 
     @ManyToOne
     @MapsId("menuItemId")
@@ -22,9 +22,9 @@ public class OrderItem {
     public OrderItem() {
     }
 
-    public OrderItem(OrderItemKey id, Order order, MenuItem menuItem, int amount) {
+    public OrderItem(OrderItemKey id, Order myOrder, MenuItem menuItem, int amount) {
         this.id = id;
-        this.order = order;
+        this.myOrder = myOrder;
         this.menuItem = menuItem;
         this.amount = amount;
     }
@@ -37,12 +37,12 @@ public class OrderItem {
         this.id = id;
     }
 
-    public Order getOrder() {
-        return order;
+    public Order getMyOrder() {
+        return myOrder;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setMyOrder(Order order) {
+        this.myOrder = order;
     }
 
     public MenuItem getMenuItem() {

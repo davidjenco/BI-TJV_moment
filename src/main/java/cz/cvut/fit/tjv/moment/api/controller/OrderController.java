@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import cz.cvut.fit.tjv.moment.api.converter.OrderConverter;
 import cz.cvut.fit.tjv.moment.api.dtos.OrderDto;
 import cz.cvut.fit.tjv.moment.api.dtos.Views;
-import cz.cvut.fit.tjv.moment.business.CheckCustomerAgeWarningException;
-import cz.cvut.fit.tjv.moment.business.ElementAlreadyExistsException;
-import cz.cvut.fit.tjv.moment.business.LuckyWinException;
-import cz.cvut.fit.tjv.moment.business.OrderService;
+import cz.cvut.fit.tjv.moment.business.*;
+import cz.cvut.fit.tjv.moment.domain.Branch;
 import cz.cvut.fit.tjv.moment.domain.Order;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,17 +15,21 @@ import java.util.Collection;
 @RestController
 public class OrderController {
     private final OrderService orderService;
+    private final BranchService branchService;
     private final MenuItemController menuItemController;
 
-    public OrderController(OrderService orderService, MenuItemController menuItemController) {
+    public OrderController(OrderService orderService, BranchService branchService, MenuItemController menuItemController) {
         this.orderService = orderService;
+        this.branchService = branchService;
         this.menuItemController = menuItemController;
     }
 
     @PostMapping("/orders")
     OrderDto createOrder(@RequestBody OrderDto orderDto) throws ElementAlreadyExistsException {
-        Order orderDomain = OrderConverter.toDomain(orderDto);
-        orderService.create(orderDomain);
+        Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
+        Order orderDomain = OrderConverter.toDomain(orderDto, branch);
+        Order returnedOrder = orderService.create(orderDomain);
+        orderDto.id = returnedOrder.getId();
         return orderDto;
     }
 
@@ -45,12 +47,13 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{id}")
-    OrderDto updateOrder(@RequestBody OrderDto OrderDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
+    OrderDto updateOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
         orderService.readById(id).orElseThrow();
-        Order orderDomain = OrderConverter.toDomain(OrderDto);
+        Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
+        Order orderDomain = OrderConverter.toDomain(orderDto, branch);
         orderService.update(orderDomain);
 
-        return OrderDto;
+        return orderDto;
     }
 
     @DeleteMapping("/orders/{id}")

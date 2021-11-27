@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Entity
+@Entity(name = "order_db")
 public class Order {
     @Id
     @GeneratedValue
@@ -14,7 +14,7 @@ public class Order {
     private LocalDate date;
     @ManyToOne
     private Branch branch;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "myOrder")
     private Set<OrderItem> orderItems;
     private boolean shouldCheckCustomerAge;
     private OrderState orderState = OrderState.OPEN;

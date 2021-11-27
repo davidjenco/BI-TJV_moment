@@ -5,33 +5,39 @@ import cz.cvut.fit.tjv.moment.api.converter.BranchConverter;
 import cz.cvut.fit.tjv.moment.api.dtos.BranchDto;
 import cz.cvut.fit.tjv.moment.api.dtos.OrderDto;
 import cz.cvut.fit.tjv.moment.api.dtos.Views;
-import cz.cvut.fit.tjv.moment.business.BranchService;
-import cz.cvut.fit.tjv.moment.business.CheckCustomerAgeWarningException;
-import cz.cvut.fit.tjv.moment.business.ElementAlreadyExistsException;
-import cz.cvut.fit.tjv.moment.business.LuckyWinException;
+import cz.cvut.fit.tjv.moment.business.*;
 import cz.cvut.fit.tjv.moment.domain.Branch;
+import cz.cvut.fit.tjv.moment.domain.Order;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @RestController //@Component inside
 public class BranchController {
 
     private final BranchService branchService;
+    private final OrderService orderService;
     private final OrderController orderController;
 
-    public BranchController(BranchService branchService, OrderController orderController) {
+    public BranchController(BranchService branchService, OrderService orderService, OrderController orderController) {
         this.branchService = branchService;
+        this.orderService = orderService;
         this.orderController = orderController;
     }
 
     @PostMapping("/branches")
     BranchDto createBranch(@RequestBody BranchDto branchDto) throws ElementAlreadyExistsException {
         //protože tady je requestBody, tak ta utilita vezme tu zprávu (u nás ve formátu JSON) a pokusí se ji převést na ten BranchDto
-        Branch branchDomain = BranchConverter.toDomain(branchDto);
+
+        Collection<Order> orders = new ArrayList<>();
+        //TODO pro každé ID najít order v databázi a vložit sem
+        for (Long orderId : branchDto.ordersIds) {
+            orders.add(orderService.readById(orderId).orElseThrow());
+        }
+
+        Branch branchDomain = BranchConverter.toDomain(branchDto, orders);
         branchService.create(branchDomain);
-//        branchDomain = branchService.readById(branchDomain.getId()).orElseThrow();
-//        return BranchConverter.fromDomain(branchDomain);
         return branchDto;
     }
 
@@ -48,10 +54,16 @@ public class BranchController {
         return BranchConverter.fromDomainMany(branchService.readAll()); //já mu vytáhnu z databáze manyMýchDomain typů a on mi vrátí ze serveru ten požadavek
     }
 
-    @PutMapping("/branches/{id}")
+    @PutMapping("/branches/{id}") //TODO tady spíš PATCH
     BranchDto updateBranch(@RequestBody BranchDto branchDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
         branchService.readById(id).orElseThrow();
-        Branch branchDomain = BranchConverter.toDomain(branchDto);
+
+        Collection<Order> orders = new ArrayList<>();
+        for (Long orderId : branchDto.ordersIds) {
+            orders.add(orderService.readById(orderId).orElseThrow());
+        }
+
+        Branch branchDomain = BranchConverter.toDomain(branchDto, orders);
         branchService.update(branchDomain);
 
         return branchDto;
@@ -64,11 +76,13 @@ public class BranchController {
 
     @PostMapping("/branches/{id}/orders")
     BranchDto addOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException, LuckyWinException {
+        orderDto.id = id; //branchId here must be equivalent to this branch id (in placeholder)
         readOne(id);
-        orderController.createOrder(orderDto);
+        OrderDto returnedDto = orderController.createOrder(orderDto);
+        //Id = service find by value...
 
         BranchDto branch = readOne(id);
-        branch.addOrder(orderDto.id);
+        branch.addOrder(returnedDto.id);
         updateBranch(branch, id);
 
         return branch;
