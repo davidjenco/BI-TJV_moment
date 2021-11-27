@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class BranchService extends AbstractCrudService<Long, Branch>{
 
-    protected BranchService(BranchJpaRepository repository, OrderService orderService) {
+    protected BranchService(BranchJpaRepository repository) {
         super(repository);
     }
 

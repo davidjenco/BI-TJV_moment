@@ -49,7 +49,7 @@ public abstract class AbstractCrudService<K, E> {
      *
      * @param entity the new state of the entity to be updated; the instance must contain a key value
      */
-    public void update(E entity) throws CheckCustomerAgeWarningException {
+    public void update(E entity) throws CheckCustomerAgeWarningException, LuckyWinException {
         if (exists(entity)) {
             repository.save(entity);
         }

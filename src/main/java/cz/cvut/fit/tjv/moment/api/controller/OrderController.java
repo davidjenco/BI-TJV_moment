@@ -6,6 +6,7 @@ import cz.cvut.fit.tjv.moment.api.dtos.OrderDto;
 import cz.cvut.fit.tjv.moment.api.dtos.Views;
 import cz.cvut.fit.tjv.moment.business.CheckCustomerAgeWarningException;
 import cz.cvut.fit.tjv.moment.business.ElementAlreadyExistsException;
+import cz.cvut.fit.tjv.moment.business.LuckyWinException;
 import cz.cvut.fit.tjv.moment.business.OrderService;
 import cz.cvut.fit.tjv.moment.domain.Order;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,7 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{id}")
-    OrderDto updateOrder(@RequestBody OrderDto OrderDto, @PathVariable Long id) throws CheckCustomerAgeWarningException {
+    OrderDto updateOrder(@RequestBody OrderDto OrderDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
         orderService.readById(id).orElseThrow();
         Order orderDomain = OrderConverter.toDomain(OrderDto);
         orderService.update(orderDomain);

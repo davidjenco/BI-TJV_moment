@@ -25,7 +25,7 @@ public class OrderService extends AbstractCrudService<Long, Order>{
     }
 
     @Override
-    public void update(Order entity) throws CheckCustomerAgeWarningException {
+    public void update(Order entity) throws CheckCustomerAgeWarningException, LuckyWinException {
         if (exists(entity)) {
             Order storedOrder = repository.findById(entity.getId()).orElseThrow(); //should not happen - entity exists here
             if (!storedOrder.getOrderState().equals(entity.getOrderState()) && entity.getOrderState().equals(OrderState.CLOSED)){ //TODO opačný směr?

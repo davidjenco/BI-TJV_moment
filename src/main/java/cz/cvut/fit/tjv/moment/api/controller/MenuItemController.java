@@ -6,6 +6,7 @@ import cz.cvut.fit.tjv.moment.api.dtos.MenuItemDto;
 import cz.cvut.fit.tjv.moment.api.dtos.Views;
 import cz.cvut.fit.tjv.moment.business.CheckCustomerAgeWarningException;
 import cz.cvut.fit.tjv.moment.business.ElementAlreadyExistsException;
+import cz.cvut.fit.tjv.moment.business.LuckyWinException;
 import cz.cvut.fit.tjv.moment.business.MenuItemService;
 import cz.cvut.fit.tjv.moment.domain.MenuItem;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class MenuItemController {
     }
 
     @PutMapping("/menuItems/{id}")
-    MenuItemDto updateMenuItem(@RequestBody MenuItemDto menuItemDto, @PathVariable Long id) throws CheckCustomerAgeWarningException {
+    MenuItemDto updateMenuItem(@RequestBody MenuItemDto menuItemDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
         menuItemService.readById(id).orElseThrow();
         MenuItem menuItemDomain = MenuItemConverter.toDomain(menuItemDto);
         menuItemService.update(menuItemDomain);

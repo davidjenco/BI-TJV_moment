@@ -8,6 +8,7 @@ import cz.cvut.fit.tjv.moment.api.dtos.Views;
 import cz.cvut.fit.tjv.moment.business.BranchService;
 import cz.cvut.fit.tjv.moment.business.CheckCustomerAgeWarningException;
 import cz.cvut.fit.tjv.moment.business.ElementAlreadyExistsException;
+import cz.cvut.fit.tjv.moment.business.LuckyWinException;
 import cz.cvut.fit.tjv.moment.domain.Branch;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +49,7 @@ public class BranchController {
     }
 
     @PutMapping("/branches/{id}")
-    BranchDto updateBranch(@RequestBody BranchDto branchDto, @PathVariable Long id) throws CheckCustomerAgeWarningException {
+    BranchDto updateBranch(@RequestBody BranchDto branchDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
         branchService.readById(id).orElseThrow();
         Branch branchDomain = BranchConverter.toDomain(branchDto);
         branchService.update(branchDomain);
@@ -62,7 +63,7 @@ public class BranchController {
     }
 
     @PostMapping("/branches/{id}/orders")
-    BranchDto addOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException {
+    BranchDto addOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException, LuckyWinException {
         readOne(id);
         orderController.createOrder(orderDto);
 

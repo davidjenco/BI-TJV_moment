@@ -1,0 +1,18 @@
+version: "3"
+services:
+  backend:
+    build: .
+    container_name: moment_backend
+    ports:
+      - "8080:8080"
+    links:
+      - postgres
+    environment:
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://momentdb_postgres/postgres"
+      - "SPRING_DATASOURCE_USERNAME=postgres"
+      - "SPRING_DATASOURCE_PASSWORD=password"
+  postgres:
+    image: postgres:alpine
+    container_name: momentdb_postgres
+    environment:
+      POSTGRES_PASSWORD: password
