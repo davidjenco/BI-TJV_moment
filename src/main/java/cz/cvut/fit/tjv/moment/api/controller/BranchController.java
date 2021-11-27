@@ -19,11 +19,13 @@ public class BranchController {
     private final BranchService branchService;
     private final OrderService orderService;
     private final OrderController orderController;
+    private final BranchConverter branchConverter;
 
-    public BranchController(BranchService branchService, OrderService orderService, OrderController orderController) {
+    public BranchController(BranchService branchService, OrderService orderService, OrderController orderController, BranchConverter branchConverter) {
         this.branchService = branchService;
         this.orderService = orderService;
         this.orderController = orderController;
+        this.branchConverter = branchConverter;
     }
 
     @PostMapping("/branches")
@@ -36,7 +38,7 @@ public class BranchController {
             orders.add(orderService.readById(orderId).orElseThrow());
         }
 
-        Branch branchDomain = BranchConverter.toDomain(branchDto, orders);
+        Branch branchDomain = branchConverter.toDomain(branchDto, orders);
         branchService.create(branchDomain);
         return branchDto;
     }
@@ -45,13 +47,13 @@ public class BranchController {
     @GetMapping("/branches/{id}")
     BranchDto readOne(@PathVariable Long id){ //díky tomu PathVariable Spring rozparsuje tu adresu a vezme z ní to id ({id}), které chceme
         Branch branchFromDB = branchService.readById(id).orElseThrow();
-        return BranchConverter.fromDomain(branchFromDB);
+        return branchConverter.fromDomain(branchFromDB);
     }
 
     @JsonView(Views.OverView.class)
     @GetMapping("/branches")
     Collection<BranchDto> readAll(){
-        return BranchConverter.fromDomainMany(branchService.readAll()); //já mu vytáhnu z databáze manyMýchDomain typů a on mi vrátí ze serveru ten požadavek
+        return branchConverter.fromDomainMany(branchService.readAll()); //já mu vytáhnu z databáze manyMýchDomain typů a on mi vrátí ze serveru ten požadavek
     }
 
     @PutMapping("/branches/{id}") //TODO tady spíš PATCH
@@ -63,7 +65,7 @@ public class BranchController {
             orders.add(orderService.readById(orderId).orElseThrow());
         }
 
-        Branch branchDomain = BranchConverter.toDomain(branchDto, orders);
+        Branch branchDomain = branchConverter.toDomain(branchDto, orders);
         branchService.update(branchDomain);
 
         return branchDto;
@@ -76,7 +78,7 @@ public class BranchController {
 
     @PostMapping("/branches/{id}/orders")
     BranchDto addOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException, LuckyWinException {
-        orderDto.id = id; //branchId here must be equivalent to this branch id (in placeholder)
+        orderDto.branchId = id; //branchId here must be equivalent to this branch id (in placeholder)
         readOne(id);
         OrderDto returnedDto = orderController.createOrder(orderDto);
         //Id = service find by value...

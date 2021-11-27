@@ -17,17 +17,19 @@ public class OrderController {
     private final OrderService orderService;
     private final BranchService branchService;
     private final MenuItemController menuItemController;
+    private final OrderConverter orderConverter;
 
-    public OrderController(OrderService orderService, BranchService branchService, MenuItemController menuItemController) {
+    public OrderController(OrderService orderService, BranchService branchService, MenuItemController menuItemController, OrderConverter orderConverter) {
         this.orderService = orderService;
         this.branchService = branchService;
         this.menuItemController = menuItemController;
+        this.orderConverter = orderConverter;
     }
 
     @PostMapping("/orders")
     OrderDto createOrder(@RequestBody OrderDto orderDto) throws ElementAlreadyExistsException {
         Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
-        Order orderDomain = OrderConverter.toDomain(orderDto, branch);
+        Order orderDomain = orderConverter.toDomain(orderDto, branch);
         Order returnedOrder = orderService.create(orderDomain);
         orderDto.id = returnedOrder.getId();
         return orderDto;
@@ -37,20 +39,20 @@ public class OrderController {
     @GetMapping("/orders/{id}")
     OrderDto readOne(@PathVariable Long id){
         Order orderFromDB = orderService.readById(id).orElseThrow();
-        return OrderConverter.fromDomain(orderFromDB);
+        return orderConverter.fromDomain(orderFromDB);
     }
 
     @JsonView(Views.OverView.class)
     @GetMapping("/orders")
     Collection<OrderDto> readAll(){
-        return OrderConverter.fromDomainMany(orderService.readAll());
+        return orderConverter.fromDomainMany(orderService.readAll());
     }
 
     @PutMapping("/orders/{id}")
     OrderDto updateOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
         orderService.readById(id).orElseThrow();
         Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
-        Order orderDomain = OrderConverter.toDomain(orderDto, branch);
+        Order orderDomain = orderConverter.toDomain(orderDto, branch);
         orderService.update(orderDomain);
 
         return orderDto;

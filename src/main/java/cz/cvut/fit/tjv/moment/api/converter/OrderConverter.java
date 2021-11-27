@@ -1,28 +1,32 @@
 package cz.cvut.fit.tjv.moment.api.converter;
 
 import cz.cvut.fit.tjv.moment.api.dtos.OrderDto;
-import cz.cvut.fit.tjv.moment.api.dtos.OrderItemDto;
-import cz.cvut.fit.tjv.moment.business.BranchService;
-import cz.cvut.fit.tjv.moment.business.OrderService;
 import cz.cvut.fit.tjv.moment.domain.Branch;
 import cz.cvut.fit.tjv.moment.domain.Order;
-import cz.cvut.fit.tjv.moment.domain.OrderItem;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+@Component
 public class OrderConverter {
 
-    public static Order toDomain(OrderDto orderDto, Branch branch){
-        return new Order(orderDto.getId(), orderDto.date, branch, new HashSet<>(OrderItemConverter.toDomainMany(orderDto.orderItemDtos, orderDto.id, null)), orderDto.shouldCheckCustomerAge, orderDto.orderState, orderDto.isFree);
+    private final OrderItemConverter orderItemConverter;
+
+    public OrderConverter(OrderItemConverter orderItemConverter) {
+        this.orderItemConverter = orderItemConverter;
     }
 
-    public static OrderDto fromDomain(Order order){
-        return new OrderDto(order.getId(), order.getDate(), order.getBranch().getId(), OrderItemConverter.fromDomainMany(order.getOrderItems(), true), order.shouldCheckCustomerAge(), order.getOrderState(), order.isFree());
+    public Order toDomain(OrderDto orderDto, Branch branch){
+        return new Order(orderDto.getId(), orderDto.date, branch, new HashSet<>(orderItemConverter.toDomainMany(orderDto.orderItemDtos, orderDto.id, null)), orderDto.shouldCheckCustomerAge, orderDto.orderState, orderDto.isFree);
     }
 
-    public static Collection<Long> fromDomainToIdsMany(Collection<Order> orders) {
+    public OrderDto fromDomain(Order order){
+        return new OrderDto(order.getId(), order.getDate(), order.getBranch().getId(), orderItemConverter.fromDomainMany(order.getOrderItems(), true), order.shouldCheckCustomerAge(), order.getOrderState(), order.isFree());
+    }
+
+    public Collection<Long> fromDomainToIdsMany(Collection<Order> orders) {
         Collection<Long> orderIds = new ArrayList<>();
         for (Order order : orders) {
             orderIds.add(order.getId());
@@ -30,9 +34,9 @@ public class OrderConverter {
         return orderIds;
     }
 
-    public static Collection<OrderDto> fromDomainMany(Collection<Order> drders) {
+    public Collection<OrderDto> fromDomainMany(Collection<Order> orders) {
         Collection<OrderDto> orderDtos = new ArrayList<>();
-        drders.forEach((u) -> orderDtos.add(fromDomain(u)));
+        orders.forEach((u) -> orderDtos.add(fromDomain(u)));
         return orderDtos;
     }
 

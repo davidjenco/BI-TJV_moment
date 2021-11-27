@@ -16,14 +16,16 @@ import java.util.Collection;
 @RestController
 public class MenuItemController {
     private final MenuItemService menuItemService;
+    private final MenuItemConverter menuItemConverter;
 
-    public MenuItemController(MenuItemService menuItemService) {
+    public MenuItemController(MenuItemService menuItemService, MenuItemConverter menuItemConverter) {
         this.menuItemService = menuItemService;
+        this.menuItemConverter = menuItemConverter;
     }
 
     @PostMapping("/menuItems")
     MenuItemDto createMenuItem(@RequestBody MenuItemDto menuItemDto) throws ElementAlreadyExistsException {
-        MenuItem menuItemDomain = MenuItemConverter.toDomain(menuItemDto);
+        MenuItem menuItemDomain = menuItemConverter.toDomain(menuItemDto);
         menuItemService.create(menuItemDomain);
         return menuItemDto;
     }
@@ -32,19 +34,19 @@ public class MenuItemController {
     @GetMapping("/menuItems/{id}")
     MenuItemDto readOne(@PathVariable Long id){
         MenuItem menuItemFromDB = menuItemService.readById(id).orElseThrow();
-        return MenuItemConverter.fromDomain(menuItemFromDB);
+        return menuItemConverter.fromDomain(menuItemFromDB);
     }
 
     @JsonView(Views.OverView.class)
     @GetMapping("/menuItems")
     Collection<MenuItemDto> readAll(){
-        return MenuItemConverter.fromDomainMany(menuItemService.readAll());
+        return menuItemConverter.fromDomainMany(menuItemService.readAll());
     }
 
     @PutMapping("/menuItems/{id}")
     MenuItemDto updateMenuItem(@RequestBody MenuItemDto menuItemDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
         menuItemService.readById(id).orElseThrow();
-        MenuItem menuItemDomain = MenuItemConverter.toDomain(menuItemDto);
+        MenuItem menuItemDomain = menuItemConverter.toDomain(menuItemDto);
         menuItemService.update(menuItemDomain);
 
         return menuItemDto;
