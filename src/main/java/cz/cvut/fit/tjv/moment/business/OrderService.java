@@ -13,9 +13,11 @@ import java.util.NoSuchElementException;
 public class OrderService extends AbstractCrudService<Long, Order>{
 
     private final BranchService branchService;
+    private final OrderJpaRepository orderJpaRepository;
 
     protected OrderService(OrderJpaRepository repository, BranchService branchService) {
         super(repository);
+        orderJpaRepository = repository;
         this.branchService = branchService;
     }
 
@@ -29,11 +31,9 @@ public class OrderService extends AbstractCrudService<Long, Order>{
         if (exists(entity)) {
             Order storedOrder = repository.findById(entity.getId()).orElseThrow(); //should not happen - entity exists here
             if (!storedOrder.getOrderState().equals(entity.getOrderState()) && entity.getOrderState().equals(OrderState.CLOSED)){ //TODO opačný směr?
-                repository.save(entity); //otázka, jestli to potřebuju i zde
-                double totalPrice = 0;
+                repository.save(entity); //otázka, jestli to potřebuju i tady
 
-                //TODO získat totalPrice
-                //TODO select sum (select )
+                double totalPrice = orderJpaRepository.getOrderTotalPrice(entity.getId());
 
                 entity = branchService.complementOrder(entity, totalPrice);
                 repository.save(entity);
