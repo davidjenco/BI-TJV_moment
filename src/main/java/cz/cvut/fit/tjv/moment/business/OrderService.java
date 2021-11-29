@@ -10,13 +10,10 @@ import java.util.NoSuchElementException;
 
 @Component
 @Transactional
-public class OrderService extends AbstractCrudService<Long, Order>{
-
-    private final OrderJpaRepository orderJpaRepository;
+public class OrderService extends AbstractCrudService<Long, Order, OrderJpaRepository>{
 
     protected OrderService(OrderJpaRepository repository) {
         super(repository);
-        orderJpaRepository = repository;
     }
 
     @Override
@@ -26,7 +23,7 @@ public class OrderService extends AbstractCrudService<Long, Order>{
 
     public void complementOrder(Order entity) throws LuckyWinException {
         if (exists(entity)) {
-            int totalPrice = orderJpaRepository.getOrderTotalPrice(entity.getId());
+            int totalPrice = repository.getOrderTotalPrice(entity.getId());
 
             if (entity.getBranch().getLuckyNum() == totalPrice)
                 entity.setFree(true);

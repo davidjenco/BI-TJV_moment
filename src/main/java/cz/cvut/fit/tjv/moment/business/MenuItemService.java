@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 
 @Component
 @Transactional
-public class MenuItemService extends AbstractCrudService<Long, MenuItem>{
+public class MenuItemService extends AbstractCrudService<Long, MenuItem, MenuItemJpaRepository>{
     public MenuItemService(MenuItemJpaRepository repository) {
         super(repository);
     }

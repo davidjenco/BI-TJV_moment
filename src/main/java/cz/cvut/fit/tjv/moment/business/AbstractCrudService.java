@@ -12,13 +12,13 @@ import java.util.Optional;
  * @param <K> Type of (primary) key.
  * @param <E> Type of entity
  */
-public abstract class AbstractCrudService<K, E> {
+public abstract class AbstractCrudService<K, E, REPOSITORY extends JpaRepository<E, K>> {
     /**
      * Reference to data (persistence) layer.
      */
-    protected final JpaRepository<E, K> repository;
+    protected final REPOSITORY repository;
 
-    protected AbstractCrudService(JpaRepository<E, K> repository) {
+    protected AbstractCrudService(REPOSITORY repository) {
         this.repository = repository;
     }
 

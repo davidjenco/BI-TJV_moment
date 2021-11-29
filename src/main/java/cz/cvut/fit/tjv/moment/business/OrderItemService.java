@@ -1,5 +1,7 @@
 package cz.cvut.fit.tjv.moment.business;
 
+import cz.cvut.fit.tjv.moment.dao.OrderItemJpaRepository;
+import cz.cvut.fit.tjv.moment.dao.OrderJpaRepository;
 import cz.cvut.fit.tjv.moment.domain.OrderItem;
 import cz.cvut.fit.tjv.moment.domain.OrderItemKey;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,9 +11,9 @@ import javax.transaction.Transactional;
 
 @Component
 @Transactional
-public class OrderItemService extends AbstractCrudService<OrderItemKey, OrderItem>{
+public class OrderItemService extends AbstractCrudService<OrderItemKey, OrderItem, OrderItemJpaRepository>{
 
-    protected OrderItemService(JpaRepository<OrderItem, OrderItemKey> repository) {
+    protected OrderItemService(OrderItemJpaRepository repository) {
         super(repository);
     }
 

@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 
 @Component
 @Transactional
-public class BranchService extends AbstractCrudService<Long, Branch>{
+public class BranchService extends AbstractCrudService<Long, Branch, BranchJpaRepository>{
 
     protected BranchService(BranchJpaRepository repository) {
         super(repository);
@@ -18,5 +18,9 @@ public class BranchService extends AbstractCrudService<Long, Branch>{
     @Override
     public boolean exists(Branch entity) {
         return repository.existsById(entity.getId());
+    }
+
+    public int getTotalSales(Long id){
+        return repository.getTotalSales(id);
     }
 }

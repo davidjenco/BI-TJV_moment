@@ -70,4 +70,9 @@ public class BranchController {
         orderController.createOrder(orderDto);
         return readOne(id);
     }
+
+    @GetMapping("/branches/{id}/sales")
+    int getTotalSales(@PathVariable Long id){ //díky tomu PathVariable Spring rozparsuje tu adresu a vezme z ní to id ({id}), které chceme
+        return branchService.getTotalSales(id);
+    }
 }
