@@ -3,8 +3,7 @@ package cz.cvut.fit.tjv.moment.api.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import cz.cvut.fit.tjv.moment.api.converter.OrderConverter;
 import cz.cvut.fit.tjv.moment.api.converter.OrderItemConverter;
-import cz.cvut.fit.tjv.moment.api.dtos.OrderDto;
-import cz.cvut.fit.tjv.moment.api.dtos.Views;
+import cz.cvut.fit.tjv.moment.api.dtos.*;
 import cz.cvut.fit.tjv.moment.business.*;
 import cz.cvut.fit.tjv.moment.domain.*;
 import org.springframework.web.bind.annotation.*;
@@ -19,18 +18,14 @@ public class OrderController {
     private final BranchService branchService;
     private final OrderItemService orderItemService;
     private final MenuItemService menuItemService;
-    private final MenuItemController menuItemController;
     private final OrderConverter orderConverter;
-    private final OrderItemConverter orderItemConverter;
 
-    public OrderController(OrderService orderService, BranchService branchService, OrderItemService orderItemService, MenuItemService menuItemService, MenuItemController menuItemController, OrderConverter orderConverter, OrderItemConverter orderItemConverter) {
+    public OrderController(OrderService orderService, BranchService branchService, OrderItemService orderItemService, MenuItemService menuItemService, OrderConverter orderConverter) {
         this.orderService = orderService;
         this.branchService = branchService;
         this.orderItemService = orderItemService;
         this.menuItemService = menuItemService;
-        this.menuItemController = menuItemController;
         this.orderConverter = orderConverter;
-        this.orderItemConverter = orderItemConverter;
     }
 
     @PostMapping("/orders")
@@ -54,15 +49,15 @@ public class OrderController {
         return orderConverter.fromDomainMany(orderService.readAll());
     }
 
-    @PutMapping("/orders/{id}")
-    OrderDto updateOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
-        orderService.readById(id).orElseThrow();
-        Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
-        Order orderDomain = orderConverter.toDomain(orderDto, branch);
-        orderService.update(orderDomain);
-
-        return orderDto;
-    }
+//    @PutMapping("/orders/{id}")
+//    OrderDto updateOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
+//        orderService.readById(id).orElseThrow();
+//        Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
+//        Order orderDomain = orderConverter.toDomain(orderDto, branch);
+//        orderService.update(orderDomain);
+//
+//        return orderDto;
+//    }
 
     @DeleteMapping("/orders/{id}")
     void deleteOrder(@PathVariable Long id){
@@ -85,8 +80,17 @@ public class OrderController {
         return readOne(id);
     }
 
-    @GetMapping("/ordersItems/wtf")
-    void wtf() {
+    @PatchMapping("/orders/{id}")
+    OrderDto updateOrderState(@RequestBody OrderStateDto orderStateDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
+        Order order = orderService.readById(id).orElseThrow();
+        if (order.getOrderState() == OrderState.OPEN && orderStateDto.orderState == OrderState.CLOSED){
+            order.setOrderState(orderStateDto.orderState);
+            orderService.complementOrder(order);
+        }else{
+            order.setOrderState(orderStateDto.orderState);
+            orderService.update(order);
+        }
 
+        return orderConverter.fromDomain(order);
     }
 }

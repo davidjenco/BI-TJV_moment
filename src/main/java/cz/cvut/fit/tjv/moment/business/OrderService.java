@@ -12,13 +12,11 @@ import java.util.NoSuchElementException;
 @Transactional
 public class OrderService extends AbstractCrudService<Long, Order>{
 
-    private final BranchService branchService;
     private final OrderJpaRepository orderJpaRepository;
 
-    protected OrderService(OrderJpaRepository repository, BranchService branchService) {
+    protected OrderService(OrderJpaRepository repository) {
         super(repository);
         orderJpaRepository = repository;
-        this.branchService = branchService;
     }
 
     @Override
@@ -26,21 +24,17 @@ public class OrderService extends AbstractCrudService<Long, Order>{
         return repository.existsById(entity.getId());
     }
 
-    @Override
-    public void update(Order entity) throws CheckCustomerAgeWarningException, LuckyWinException {
+    public void complementOrder(Order entity) throws LuckyWinException {
         if (exists(entity)) {
-            Order storedOrder = repository.findById(entity.getId()).orElseThrow(); //should not happen - entity exists here
-            if (!storedOrder.getOrderState().equals(entity.getOrderState()) && entity.getOrderState().equals(OrderState.CLOSED)){ //TODO opačný směr?
-                repository.save(entity); //otázka, jestli to potřebuju i tady
+            int totalPrice = orderJpaRepository.getOrderTotalPrice(entity.getId());
 
-                double totalPrice = orderJpaRepository.getOrderTotalPrice(entity.getId());
-
-
-                entity = branchService.complementOrder(entity, totalPrice);
-                repository.save(entity);
-            }else{
-                repository.save(entity);
+            if (entity.getBranch().getLuckyNum() == totalPrice)
+                entity.setFree(true);
+            if (entity.isFree()){
+                entity.getBranch().updateLuckyNum(); //TODO should save?
+                throw new LuckyWinException();
             }
+//            repository.save(entity);
         }
         else {
             throw new NoSuchElementException("No such element to update.");

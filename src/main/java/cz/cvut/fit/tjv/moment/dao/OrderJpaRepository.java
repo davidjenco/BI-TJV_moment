@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface OrderJpaRepository extends JpaRepository<Order, Long> {
     @Query("SELECT sum(o.amount*m.price) FROM OrderItem o join MenuItem m on (o.id.menuItemId=m.id) where o.id.orderId=:id")
-    double getOrderTotalPrice(Long id);
+    int getOrderTotalPrice(Long id);
 }

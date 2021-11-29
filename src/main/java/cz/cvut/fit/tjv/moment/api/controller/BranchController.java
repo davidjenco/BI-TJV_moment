@@ -49,14 +49,14 @@ public class BranchController {
         return branchConverter.fromDomainMany(branchService.readAll()); //já mu vytáhnu z databáze manyMýchDomain typů a on mi vrátí ze serveru ten požadavek
     }
 
-    @PutMapping("/branches/{id}") //TODO tady spíš PATCH
-    BranchDto updateBranch(@RequestBody BranchDto branchDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
-        branchService.readById(id).orElseThrow();
-        Branch branchDomain = branchConverter.toDomain(branchDto);
-        branchService.update(branchDomain);
-
-        return branchDto;
-    }
+//    @PutMapping("/branches/{id}")
+//    BranchDto updateBranch(@RequestBody BranchDto branchDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
+//        branchService.readById(id).orElseThrow();
+//        Branch branchDomain = branchConverter.toDomain(branchDto);
+//        branchService.update(branchDomain);
+//
+//        return branchDto;
+//    }
 
     @DeleteMapping("/branches/{id}")
     void deleteBranch(@PathVariable Long id){
