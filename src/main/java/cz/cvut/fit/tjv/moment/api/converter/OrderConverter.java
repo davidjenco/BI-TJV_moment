@@ -19,7 +19,7 @@ public class OrderConverter {
     }
 
     public Order toDomain(OrderDto orderDto, Branch branch){
-        return new Order(orderDto.getId(), orderDto.date, branch, new HashSet<>(orderItemConverter.toDomainMany(orderDto.orderItemDtos, orderDto.id, null)), orderDto.shouldCheckCustomerAge, orderDto.orderState, orderDto.isFree);
+        return new Order(Long.MAX_VALUE, orderDto.date, branch, new HashSet<>(orderItemConverter.toDomainMany(orderDto.orderItemDtos, orderDto.id, null)), orderDto.shouldCheckCustomerAge, orderDto.orderState, orderDto.isFree);
     }
 
     public OrderDto fromDomain(Order order){

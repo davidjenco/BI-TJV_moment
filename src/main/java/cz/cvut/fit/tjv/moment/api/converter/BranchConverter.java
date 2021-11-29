@@ -1,6 +1,7 @@
 package cz.cvut.fit.tjv.moment.api.converter;
 
 import cz.cvut.fit.tjv.moment.api.dtos.BranchDto;
+import cz.cvut.fit.tjv.moment.business.OrderService;
 import cz.cvut.fit.tjv.moment.domain.Branch;
 import cz.cvut.fit.tjv.moment.domain.Order;
 import org.springframework.stereotype.Component;
@@ -13,13 +14,19 @@ import java.util.HashSet;
 public class BranchConverter {
 
     private final OrderConverter orderConverter;
+    private final OrderService orderService;
 
-    public BranchConverter(OrderConverter orderConverter) {
+    public BranchConverter(OrderConverter orderConverter, OrderService orderService) {
         this.orderConverter = orderConverter;
+        this.orderService = orderService;
     }
 
-    public Branch toDomain(BranchDto branchDto, Collection<Order> orders){
-        return new Branch(branchDto.id, branchDto.sales, branchDto.luckyNum, new HashSet<>(orders));
+    public Branch toDomain(BranchDto branchDto){
+        Collection<Order> orders = new ArrayList<>();
+        for (Long orderId : branchDto.ordersIds) {
+            orders.add(orderService.readById(orderId).orElseThrow());
+        }
+        return new Branch(Long.MAX_VALUE, branchDto.sales, branchDto.luckyNum, new HashSet<>(orders));
     }
 
     public BranchDto fromDomain(Branch branch){

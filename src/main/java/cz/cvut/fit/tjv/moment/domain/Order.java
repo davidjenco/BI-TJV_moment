@@ -9,7 +9,8 @@ import java.util.Set;
 @Entity(name = "order_db")
 public class Order {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_generator")
+    @SequenceGenerator(name = "order_generator", sequenceName = "order_seq", allocationSize = 1)
     private Long id;
     private LocalDate date;
     @ManyToOne

@@ -33,7 +33,7 @@ public abstract class AbstractCrudService<K, E> {
     public void create(E entity) throws ElementAlreadyExistsException {
         if (exists(entity))
             throw new ElementAlreadyExistsException();
-        repository.save(entity);
+        repository.save(entity) ;
     }
 
     public Optional<E> readById(K id) {

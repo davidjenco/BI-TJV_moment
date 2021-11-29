@@ -1,9 +1,6 @@
 package cz.cvut.fit.tjv.moment.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -12,7 +9,8 @@ import java.util.concurrent.ThreadLocalRandom;
 @Entity
 public class Branch {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branch_generator")
+    @SequenceGenerator(name = "branch_generator", sequenceName = "branch_seq", allocationSize = 1)
     private Long id;
     private double sales;
     private int luckyNum;

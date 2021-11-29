@@ -18,18 +18,18 @@ public class MenuItemConverter {
     }
 
     public MenuItem toDomain(MenuItemDto menuItemDto){
-        return new MenuItem(menuItemDto.getId(), menuItemDto.name, menuItemDto.price, menuItemDto.alcoholic, new HashSet<>(orderItemConverter.toDomainMany(menuItemDto.orderItemDtos, null, menuItemDto.id)));
+        return new MenuItem(Long.MAX_VALUE, menuItemDto.name, menuItemDto.price, menuItemDto.alcoholic, new HashSet<>(orderItemConverter.toDomainMany(menuItemDto.orderItemDtos, null, menuItemDto.id)));
     }
 
     public MenuItemDto fromDomain(MenuItem menuItem){
         return new MenuItemDto(menuItem.getId(), menuItem.getName(), menuItem.getPrice(), menuItem.isAlcoholic(), orderItemConverter.fromDomainMany(menuItem.getOrdersContainingSuchItem(), false));
     }
 
-    public Collection<MenuItem> toDomainMany(Collection<MenuItemDto> menuItemDtos) {
-        Collection<MenuItem> menuItems = new ArrayList<>();
-        menuItemDtos.forEach((u) -> menuItems.add(toDomain(u)));
-        return menuItems;
-    }
+//    public Collection<MenuItem> toDomainMany(Collection<MenuItemDto> menuItemDtos) {
+//        Collection<MenuItem> menuItems = new ArrayList<>();
+//        menuItemDtos.forEach((u) -> menuItems.add(toDomain(u)));
+//        return menuItems;
+//    }
 
     public Collection<MenuItemDto> fromDomainMany(Collection<MenuItem> menuItems) {
         Collection<MenuItemDto> menuItemDtos = new ArrayList<>();

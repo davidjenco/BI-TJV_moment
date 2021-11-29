@@ -31,16 +31,8 @@ public class BranchController {
     @PostMapping("/branches")
     BranchDto createBranch(@RequestBody BranchDto branchDto) throws ElementAlreadyExistsException {
         //protože tady je requestBody, tak ta utilita vezme tu zprávu (u nás ve formátu JSON) a pokusí se ji převést na ten BranchDto
-
-        Collection<Order> orders = new ArrayList<>();
-        //TODO pro každé ID najít order v databázi a vložit sem
-        for (Long orderId : branchDto.ordersIds) {
-            orders.add(orderService.readById(orderId).orElseThrow());
-        }
-
-        Branch branchDomain = branchConverter.toDomain(branchDto, orders);
+        Branch branchDomain = branchConverter.toDomain(branchDto);
         branchService.create(branchDomain);
-
         return branchDto;
     }
 
@@ -60,13 +52,7 @@ public class BranchController {
     @PutMapping("/branches/{id}") //TODO tady spíš PATCH
     BranchDto updateBranch(@RequestBody BranchDto branchDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
         branchService.readById(id).orElseThrow();
-
-        Collection<Order> orders = new ArrayList<>();
-        for (Long orderId : branchDto.ordersIds) {
-            orders.add(orderService.readById(orderId).orElseThrow());
-        }
-
-        Branch branchDomain = branchConverter.toDomain(branchDto, orders);
+        Branch branchDomain = branchConverter.toDomain(branchDto);
         branchService.update(branchDomain);
 
         return branchDto;

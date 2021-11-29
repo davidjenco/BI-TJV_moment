@@ -1,9 +1,6 @@
 package cz.cvut.fit.tjv.moment.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -11,7 +8,8 @@ import java.util.Set;
 @Entity
 public class MenuItem {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menu_item_generator")
+    @SequenceGenerator(name = "menu_item_generator", sequenceName = "menu_item_seq", allocationSize = 1)
     private Long id;
     private String name;
     private int price;

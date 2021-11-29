@@ -35,6 +35,7 @@ public class OrderService extends AbstractCrudService<Long, Order>{
 
                 double totalPrice = orderJpaRepository.getOrderTotalPrice(entity.getId());
 
+
                 entity = branchService.complementOrder(entity, totalPrice);
                 repository.save(entity);
             }else{
