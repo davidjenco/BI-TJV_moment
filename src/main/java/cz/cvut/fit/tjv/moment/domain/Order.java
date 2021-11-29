@@ -1,5 +1,8 @@
 package cz.cvut.fit.tjv.moment.domain;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -15,7 +18,8 @@ public class Order {
     private LocalDate date;
     @ManyToOne
     private Branch branch;
-    @OneToMany(mappedBy = "myOrder")
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "myOrder", cascade = CascadeType.REMOVE)
     private Set<OrderItem> orderItems;
     private boolean shouldCheckCustomerAge;
     private OrderState orderState = OrderState.OPEN;

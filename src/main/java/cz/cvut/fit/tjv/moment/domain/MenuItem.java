@@ -1,5 +1,8 @@
 package cz.cvut.fit.tjv.moment.domain;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -14,7 +17,8 @@ public class MenuItem {
     private String name;
     private int price;
     private boolean alcoholic;
-    @OneToMany(mappedBy = "menuItem")
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "menuItem", cascade = CascadeType.REMOVE)
     private Set<OrderItem> ordersContainingSuchItem;
 
     public MenuItem() {

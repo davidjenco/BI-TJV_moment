@@ -1,5 +1,8 @@
 package cz.cvut.fit.tjv.moment.domain;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -14,7 +17,8 @@ public class Branch {
     private Long id;
     private double sales;
     private int luckyNum;
-    @OneToMany(mappedBy = "branch")
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.REMOVE)
     private Set<Order> orders;
 
     public Branch() {
