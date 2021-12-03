@@ -30,10 +30,10 @@ public abstract class AbstractCrudService<K, E, REPOSITORY extends JpaRepository
 
     public abstract boolean exists(E entity);
 
-    public void create(E entity) throws ElementAlreadyExistsException {
+    public E create(E entity) throws ElementAlreadyExistsException {
         if (exists(entity))
             throw new ElementAlreadyExistsException();
-        repository.save(entity) ;
+        return repository.save(entity) ;
     }
 
     public Optional<E> readById(K id) {
@@ -49,9 +49,9 @@ public abstract class AbstractCrudService<K, E, REPOSITORY extends JpaRepository
      *
      * @param entity the new state of the entity to be updated; the instance must contain a key value
      */
-    public void update(E entity) throws CheckCustomerAgeWarningException, LuckyWinException {
+    public E update(E entity) throws CheckCustomerAgeWarningException, LuckyWinException {
         if (exists(entity)) {
-            repository.save(entity);
+            return repository.save(entity);
         }
         else {
             throw new NoSuchElementException("No such element to update.");

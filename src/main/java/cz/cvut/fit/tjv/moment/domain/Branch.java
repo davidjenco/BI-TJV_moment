@@ -2,6 +2,7 @@ package cz.cvut.fit.tjv.moment.domain;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -70,6 +71,7 @@ public class Branch {
         this.orders = orders;
     }
 
+//    public void updateLuckyNum(@Value("${lucky.num.min}") Integer luckyNumMin){
     public void updateLuckyNum(){
         luckyNum = ThreadLocalRandom.current().nextInt(100, 200 + 1); //todo nahradit za resources
     }

@@ -29,19 +29,19 @@ public class OrderDto {
     public OrderState orderState;
 
     @JsonView(Views.Detailed.class)
-    public boolean isFree;
+    public boolean free;
 
     public OrderDto() {
     }
 
-    public OrderDto(Long id, LocalDate date, Long branchId, Collection<OrderItemDto> orderItemDtos, boolean shouldCheckCustomerAge, OrderState orderState, boolean isFree) {
+    public OrderDto(Long id, LocalDate date, Long branchId, Collection<OrderItemDto> orderItemDtos, boolean shouldCheckCustomerAge, OrderState orderState, boolean free) {
         this.id = id;
         this.date = date;
         this.branchId = branchId;
         this.orderItemDtos = orderItemDtos;
         this.shouldCheckCustomerAge = shouldCheckCustomerAge;
         this.orderState = orderState;
-        this.isFree = isFree;
+        this.free = free;
     }
 
     public Long getId() {
@@ -68,8 +68,8 @@ public class OrderDto {
         return orderState;
     }
 
-    public boolean isFree() {
-        return isFree;
+    public boolean getFree() {
+        return free;
     }
 
     public void setId(Long id) {
@@ -97,7 +97,7 @@ public class OrderDto {
     }
 
     public void setFree(boolean free) {
-        isFree = free;
+        this.free = free;
     }
 
     public void addOrderItem(OrderItemDto orderItemDto){

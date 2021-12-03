@@ -8,6 +8,7 @@ import cz.cvut.fit.tjv.moment.api.dtos.Views;
 import cz.cvut.fit.tjv.moment.business.*;
 import cz.cvut.fit.tjv.moment.domain.Branch;
 import cz.cvut.fit.tjv.moment.domain.Order;
+import org.aspectj.apache.bcel.generic.BranchHandle;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,8 +33,8 @@ public class BranchController {
     BranchDto createBranch(@RequestBody BranchDto branchDto) throws ElementAlreadyExistsException {
         //protože tady je requestBody, tak ta utilita vezme tu zprávu (u nás ve formátu JSON) a pokusí se ji převést na ten BranchDto
         Branch branchDomain = branchConverter.toDomain(branchDto);
-        branchService.create(branchDomain);
-        return branchDto;
+        Branch returnedBranch = branchService.create(branchDomain);
+        return branchConverter.fromDomain(returnedBranch);
     }
 
     @JsonView(Views.Detailed.class)

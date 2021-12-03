@@ -1,6 +1,7 @@
 package cz.cvut.fit.tjv.moment.api.converter;
 
 import cz.cvut.fit.tjv.moment.api.dtos.OrderDto;
+import cz.cvut.fit.tjv.moment.api.dtos.OrderItemDto;
 import cz.cvut.fit.tjv.moment.domain.Branch;
 import cz.cvut.fit.tjv.moment.domain.Order;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class OrderConverter {
     }
 
     public Order toDomain(OrderDto orderDto, Branch branch){
-        return new Order(Long.MAX_VALUE, orderDto.date, branch, new HashSet<>(orderItemConverter.toDomainMany(orderDto.orderItemDtos, orderDto.id, null)), orderDto.shouldCheckCustomerAge, orderDto.orderState, orderDto.isFree);
+        return new Order(Long.MAX_VALUE, orderDto.date, branch, new HashSet<>(orderItemConverter.toDomainMany(orderDto.orderItemDtos, orderDto.id, null)), orderDto.shouldCheckCustomerAge, orderDto.orderState, orderDto.free);
     }
 
     public OrderDto fromDomain(Order order){
@@ -39,5 +40,4 @@ public class OrderConverter {
         orders.forEach((u) -> orderDtos.add(fromDomain(u)));
         return orderDtos;
     }
-
 }

@@ -8,6 +8,8 @@ import cz.cvut.fit.tjv.moment.business.*;
 import cz.cvut.fit.tjv.moment.domain.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -30,10 +32,12 @@ public class OrderController {
 
     @PostMapping("/orders")
     OrderDto createOrder(@RequestBody OrderDto orderDto) throws ElementAlreadyExistsException {
+        LocalDateTime now = LocalDateTime.now();
+        orderDto.setDate(now.toLocalDate());
         Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
         Order orderDomain = orderConverter.toDomain(orderDto, branch);
-        orderService.create(orderDomain);
-        return orderDto;
+        Order returnedOrder = orderService.create(orderDomain);
+        return orderConverter.fromDomain(returnedOrder);
     }
 
     @JsonView(Views.Detailed.class)
@@ -65,13 +69,15 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{id}/orderItems/{itemId}/amount/{amount}")
-    OrderDto addOrderItem(@PathVariable Long id, @PathVariable Long itemId, @PathVariable Integer amount) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException {
+    OrderDto addOrderItem(@PathVariable Long id, @PathVariable Long itemId, @PathVariable Integer amount) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException, LuckyWinException {
         Order order = orderService.readById(id).orElseThrow();
         MenuItem menuItem = menuItemService.readById(itemId).orElseThrow();
 
         Optional<OrderItem> orderItemOptional = orderItemService.readById(new OrderItemKey(id, itemId));
         if (orderItemOptional.isPresent()){
-            orderItemOptional.get().increaseAmount(amount);
+            OrderItem orderItem = orderItemOptional.get();
+            orderItem.increaseAmount(amount);
+            orderItemService.update(orderItem);
         }else{
             OrderItem orderItem = new OrderItem(new OrderItemKey(id, itemId), order, menuItem, amount);
             orderItemService.create(orderItem);
