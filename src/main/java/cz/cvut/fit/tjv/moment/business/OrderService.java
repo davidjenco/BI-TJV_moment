@@ -23,7 +23,7 @@ public class OrderService extends AbstractCrudService<Long, Order, OrderJpaRepos
 
     public void complementOrder(Order entity) throws LuckyWinException {
         if (exists(entity)) {
-            int totalPrice = repository.getOrderTotalPrice(entity.getId());
+            int totalPrice = getTotalPrice(entity.getId());
 
             if (entity.getBranch().getLuckyNum() == totalPrice)
                 entity.setFree(true);
@@ -36,5 +36,9 @@ public class OrderService extends AbstractCrudService<Long, Order, OrderJpaRepos
         else {
             throw new NoSuchElementException("No such element to update.");
         }
+    }
+
+    public int getTotalPrice(Long id){
+        return repository.getOrderTotalPrice(id);
     }
 }

@@ -11,8 +11,11 @@ import javax.transaction.Transactional;
 @Transactional
 public class BranchService extends AbstractCrudService<Long, Branch, BranchJpaRepository>{
 
-    protected BranchService(BranchJpaRepository repository) {
+    private final OrderService orderService;
+
+    protected BranchService(BranchJpaRepository repository, OrderService orderService) {
         super(repository);
+        this.orderService = orderService;
     }
 
     @Override
@@ -21,6 +24,13 @@ public class BranchService extends AbstractCrudService<Long, Branch, BranchJpaRe
     }
 
     public int getTotalSales(Long id){
-        return repository.getTotalSales(id);
+        int sum = 0;
+        Branch branch = repository.getById(id);
+        for (Order order : branch.getOrders()) {
+            if (!order.isFree()){
+                orderService.getTotalPrice(order.getId());
+            }
+        }
+        return sum;
     }
 }
