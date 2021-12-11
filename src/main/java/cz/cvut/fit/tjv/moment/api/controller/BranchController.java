@@ -67,7 +67,7 @@ public class BranchController {
     @PostMapping("/branches/{id}/orders")
     BranchDto addOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException, LuckyWinException {
         orderDto.branchId = id; //branchId here must be equivalent to this branch id (in placeholder)
-        readOne(id);
+        branchService.readById(id).orElseThrow();
         orderController.createOrder(orderDto);
         return readOne(id);
     }
