@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import cz.cvut.fit.tjv.moment.domain.OrderState;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 public class OrderDto {
@@ -13,8 +14,8 @@ public class OrderDto {
     public Long id;
 
     @JsonView(Views.OverView.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "d.M.yyyy")
-    public LocalDate date;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "d.M.yyyy HH:mm:ss")
+    public LocalDateTime date;
 
     @JsonView(Views.Detailed.class)
     public Long branchId;
@@ -34,7 +35,7 @@ public class OrderDto {
     public OrderDto() {
     }
 
-    public OrderDto(Long id, LocalDate date, Long branchId, Collection<OrderItemDto> orderItemDtos, boolean shouldCheckCustomerAge, OrderState orderState, boolean free) {
+    public OrderDto(Long id, LocalDateTime date, Long branchId, Collection<OrderItemDto> orderItemDtos, boolean shouldCheckCustomerAge, OrderState orderState, boolean free) {
         this.id = id;
         this.date = date;
         this.branchId = branchId;
@@ -48,7 +49,7 @@ public class OrderDto {
         return id;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
@@ -76,7 +77,7 @@ public class OrderDto {
         this.id = id;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

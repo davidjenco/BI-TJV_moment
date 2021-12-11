@@ -33,7 +33,7 @@ public class OrderController {
     @PostMapping("/orders")
     OrderDto createOrder(@RequestBody OrderDto orderDto) throws ElementAlreadyExistsException {
         LocalDateTime now = LocalDateTime.now();
-        orderDto.setDate(now.toLocalDate());
+        orderDto.setDate(now);
         Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
         Order orderDomain = orderConverter.toDomain(orderDto, branch);
         Order returnedOrder = orderService.create(orderDomain);

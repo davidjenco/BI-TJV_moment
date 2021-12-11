@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -15,7 +16,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_generator")
     @SequenceGenerator(name = "order_generator", sequenceName = "order_seq", allocationSize = 1)
     private Long id;
-    private LocalDate date;
+    private LocalDateTime date;
     @ManyToOne
     private Branch branch;
 //    @OnDelete(action = OnDeleteAction.CASCADE)
@@ -28,7 +29,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(Long id, LocalDate date) {
+    public Order(Long id, LocalDateTime date) {
         this.id = id;
         this.date = date;
         branch = new Branch();
@@ -37,7 +38,7 @@ public class Order {
     }
 
 
-    public Order(Long id, LocalDate date, Branch branch, Set<OrderItem> orderItems, boolean shouldCheckCustomerAge, OrderState orderState, boolean isFree) {
+    public Order(Long id, LocalDateTime date, Branch branch, Set<OrderItem> orderItems, boolean shouldCheckCustomerAge, OrderState orderState, boolean isFree) {
         this.id = id;
         this.date = date;
         this.branch = branch;
@@ -55,7 +56,7 @@ public class Order {
         return id;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
@@ -83,7 +84,7 @@ public class Order {
         this.id = id;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
