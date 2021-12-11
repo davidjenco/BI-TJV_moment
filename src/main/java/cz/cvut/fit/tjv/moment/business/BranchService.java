@@ -3,6 +3,7 @@ package cz.cvut.fit.tjv.moment.business;
 import cz.cvut.fit.tjv.moment.dao.BranchJpaRepository;
 import cz.cvut.fit.tjv.moment.domain.Branch;
 import cz.cvut.fit.tjv.moment.domain.Order;
+import cz.cvut.fit.tjv.moment.domain.OrderState;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -27,10 +28,11 @@ public class BranchService extends AbstractCrudService<Long, Branch, BranchJpaRe
         int sum = 0;
         Branch branch = repository.getById(id);
         for (Order order : branch.getOrders()) {
-            if (!order.isFree()){
-                orderService.getTotalPrice(order.getId());
+            if (!order.isFree() && order.getOrderState() == OrderState.CLOSED){
+                sum += orderService.getTotalPrice(order.getId());
             }
         }
         return sum;
     }
 }
+//todo test total sales
