@@ -35,4 +35,3 @@ public class BranchService extends AbstractCrudService<Long, Branch, BranchJpaRe
         return sum;
     }
 }
-//todo test total sales
