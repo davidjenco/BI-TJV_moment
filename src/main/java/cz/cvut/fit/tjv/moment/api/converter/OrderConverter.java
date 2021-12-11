@@ -25,7 +25,6 @@ public class OrderConverter {
     }
 
     public OrderDto fromDomain(Order order){
-//        var date = order.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
         return new OrderDto(order.getId(), order.getDate(), order.getBranch().getId(), orderItemConverter.fromDomainMany(order.getOrderItems(), true), order.shouldCheckCustomerAge(), order.getOrderState(), order.isFree());
     }
 

@@ -53,15 +53,15 @@ public class OrderController {
         return orderConverter.fromDomainMany(orderService.readAll());
     }
 
-//    @PutMapping("/orders/{id}")
-//    OrderDto updateOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
-//        orderService.readById(id).orElseThrow();
-//        Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
-//        Order orderDomain = orderConverter.toDomain(orderDto, branch);
-//        orderService.update(orderDomain);
-//
-//        return orderDto;
-//    }
+    @PutMapping("/orders/{id}")
+    OrderDto updateOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
+        orderService.readById(id).orElseThrow();
+        Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
+        Order orderDomain = orderConverter.toDomain(orderDto, branch);
+        orderService.update(orderDomain);
+
+        return orderDto;
+    }
 
     @DeleteMapping("/orders/{id}")
     void deleteOrder(@PathVariable Long id){
@@ -72,6 +72,11 @@ public class OrderController {
     OrderDto addOrderItem(@PathVariable Long id, @PathVariable Long itemId, @PathVariable Integer amount) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException, LuckyWinException {
         Order order = orderService.readById(id).orElseThrow();
         MenuItem menuItem = menuItemService.readById(itemId).orElseThrow();
+
+        if (!order.shouldCheckCustomerAge() && menuItem.isAlcoholic()){
+            order.setShouldCheckCustomerAge(true);
+            orderService.update(order);
+        }
 
         Optional<OrderItem> orderItemOptional = orderItemService.readById(new OrderItemKey(id, itemId));
         if (orderItemOptional.isPresent()){
