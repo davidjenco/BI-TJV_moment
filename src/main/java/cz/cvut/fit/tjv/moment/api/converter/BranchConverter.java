@@ -26,11 +26,11 @@ public class BranchConverter {
         for (Long orderId : branchDto.ordersIds) {
             orders.add(orderService.readById(orderId).orElseThrow());
         }
-        return new Branch(Long.MAX_VALUE, branchDto.sales, branchDto.luckyNum, new HashSet<>(orders));
+        return new Branch(Long.MAX_VALUE, branchDto.luckyNum, new HashSet<>(orders));
     }
 
     public BranchDto fromDomain(Branch branch){
-        return new BranchDto(branch.getId(), branch.getSales(), branch.getLuckyNum(), orderConverter.fromDomainToIdsMany(branch.getOrders()));
+        return new BranchDto(branch.getId(), branch.getLuckyNum(), orderConverter.fromDomainToIdsMany(branch.getOrders()));
     }
 
 //    public Collection<Branch> toDomainMany(Collection<BranchDto> branchDtos) {

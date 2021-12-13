@@ -10,9 +10,6 @@ public class BranchDto {
     @JsonView(Views.OverView.class)
     public Long id;
 
-    @JsonView(Views.OverView.class)
-    public double sales;
-
     @JsonView(Views.Detailed.class)
     public int luckyNum;
 
@@ -22,9 +19,8 @@ public class BranchDto {
     public BranchDto (){ //je potřeba, jinak zlobí json
     }
 
-    public BranchDto(Long id, double sales, int luckyNum, Collection<Long> ordersIds) {
+    public BranchDto(Long id, int luckyNum, Collection<Long> ordersIds) {
         this.id = id;
-        this.sales = sales;
         this.luckyNum = luckyNum;
         this.ordersIds = ordersIds;
     }
@@ -32,10 +28,6 @@ public class BranchDto {
     //gettery a settery jsou tady potřeba, protože pomocí nich ten JSON zkonstruuje, nebo to z něj zkonstruuje
     public Long getId() {
         return id;
-    }
-
-    public double getSales() {
-        return sales;
     }
 
     public int getLuckyNum() {
@@ -48,10 +40,6 @@ public class BranchDto {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setSales(double sales) {
-        this.sales = sales;
     }
 
     public void setLuckyNum(int luckyNum) {

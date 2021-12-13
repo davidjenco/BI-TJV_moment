@@ -16,7 +16,6 @@ public class Branch {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branch_generator")
     @SequenceGenerator(name = "branch_generator", sequenceName = "branch_seq", allocationSize = 1)
     private Long id;
-    private double sales;
     private int luckyNum;
 //    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "branch", cascade = CascadeType.REMOVE)
@@ -25,19 +24,14 @@ public class Branch {
     public Branch() {
     }
 
-    public Branch(Long id, double sales, int luckyNum, Set<Order> orders) {
+    public Branch(Long id, int luckyNum, Set<Order> orders) {
         this.id = id;
-        this.sales = sales;
         this.luckyNum = luckyNum;
         this.orders = orders;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public double getSales() {
-        return sales;
     }
 
     public int getLuckyNum() {
@@ -52,10 +46,6 @@ public class Branch {
         this.id = id;
     }
 
-    public void setSales(double sales) {
-        this.sales = sales;
-    }
-
     public void setLuckyNum(int luckyNum) {
         this.luckyNum = luckyNum;
     }
@@ -67,10 +57,6 @@ public class Branch {
     public void updateLuckyNum(){
         var rand = ThreadLocalRandom.current().nextInt(100, 200 + 1);
         luckyNum = rand - rand % 10;
-    }
-
-    public void addSales(double amount) {
-        sales += amount;
     }
 
     public void addOrder(Order order){
@@ -94,7 +80,6 @@ public class Branch {
     public String toString() {
         return "Branch{" +
                 "id=" + id +
-                ", sales=" + sales +
                 ", luckyNum=" + luckyNum +
                 ", orders=" + orders +
                 '}';
