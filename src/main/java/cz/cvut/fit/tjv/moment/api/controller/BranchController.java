@@ -18,13 +18,11 @@ import java.util.Collection;
 public class BranchController {
 
     private final BranchService branchService;
-    private final OrderService orderService;
     private final OrderController orderController;
     private final BranchConverter branchConverter;
 
-    public BranchController(BranchService branchService, OrderService orderService, OrderController orderController, BranchConverter branchConverter) {
+    public BranchController(BranchService branchService, OrderController orderController, BranchConverter branchConverter) {
         this.branchService = branchService;
-        this.orderService = orderService;
         this.orderController = orderController;
         this.branchConverter = branchConverter;
     }
@@ -73,7 +71,8 @@ public class BranchController {
     }
 
     @GetMapping("/branches/{id}/sales")
-    int getTotalSales(@PathVariable Long id){ //díky tomu PathVariable Spring rozparsuje tu adresu a vezme z ní to id ({id}), které chceme
+    int getTotalSales(@PathVariable Long id){
+        branchService.readById(id).orElseThrow();
         return branchService.getTotalSales(id);
     }
 }
