@@ -64,10 +64,9 @@ public class Branch {
         this.orders = orders;
     }
 
-//    public void updateLuckyNum(@Value("${lucky.num.min}") Integer luckyNumMin){
     public void updateLuckyNum(){
         var rand = ThreadLocalRandom.current().nextInt(100, 200 + 1);
-        luckyNum = rand - rand % 10; //todo nahradit za resources
+        luckyNum = rand - rand % 10;
     }
 
     public void addSales(double amount) {
