@@ -25,13 +25,6 @@ public class Branch {
     public Branch() {
     }
 
-    public Branch(Long id, int sales) {
-        this.id = id;
-        this.sales = sales;
-        this.orders = new HashSet<>();
-        updateLuckyNum();
-    }
-
     public Branch(Long id, double sales, int luckyNum, Set<Order> orders) {
         this.id = id;
         this.sales = sales;
