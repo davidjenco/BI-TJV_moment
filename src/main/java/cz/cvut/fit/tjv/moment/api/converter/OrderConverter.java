@@ -1,12 +1,12 @@
 package cz.cvut.fit.tjv.moment.api.converter;
 
 import cz.cvut.fit.tjv.moment.api.dtos.OrderDto;
-import cz.cvut.fit.tjv.moment.api.dtos.OrderItemDto;
+import cz.cvut.fit.tjv.moment.business.MenuItemService;
 import cz.cvut.fit.tjv.moment.domain.Branch;
+import cz.cvut.fit.tjv.moment.domain.MenuItem;
 import cz.cvut.fit.tjv.moment.domain.Order;
 import org.springframework.stereotype.Component;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,21 +14,29 @@ import java.util.HashSet;
 @Component
 public class OrderConverter {
 
-    private final OrderItemConverter orderItemConverter;
+    private final MenuItemService menuItemService;
 
-    public OrderConverter(OrderItemConverter orderItemConverter) {
-        this.orderItemConverter = orderItemConverter;
+    public OrderConverter(MenuItemService menuItemService) {
+        this.menuItemService = menuItemService;
     }
 
     public Order toDomain(OrderDto orderDto, Branch branch){
-        return new Order(Long.MAX_VALUE, orderDto.date, branch, new HashSet<>(orderItemConverter.toDomainMany(orderDto.orderItemDtos, orderDto.id, null)), orderDto.shouldCheckCustomerAge, orderDto.orderState, orderDto.free);
+        Collection<MenuItem> menuItems = new ArrayList<>();
+        for (Long menuItemId : orderDto.getMenuItemIds()) {
+            menuItems.add(menuItemService.readById(menuItemId).orElseThrow());
+        }
+        return new Order(Long.MAX_VALUE, orderDto.date, branch, new HashSet<>(menuItems), orderDto.shouldCheckCustomerAge, orderDto.orderState, orderDto.free);
     }
 
     public OrderDto fromDomain(Order order){
-        return new OrderDto(order.getId(), order.getDate(), order.getBranch().getId(), orderItemConverter.fromDomainMany(order.getOrderItems(), true), order.shouldCheckCustomerAge(), order.getOrderState(), order.isFree());
+        Collection<Long> menuItemIds = new ArrayList<>();
+        for (MenuItem menuItem : order.getOrderItems()) {
+            menuItemIds.add(menuItem.getId());
+        }
+        return new OrderDto(order.getId(), order.getDate(), order.getBranch().getId(), menuItemIds, order.shouldCheckCustomerAge(), order.getOrderState(), order.isFree());
     }
 
-    public Collection<Long> fromDomainToIdsMany(Collection<Order> orders) {
+    public Collection<Long> fromDomainToIdsMany(Collection<Order> orders) { //todo asi takhle předělat i ty ostatní
         Collection<Long> orderIds = new ArrayList<>();
         for (Order order : orders) {
             orderIds.add(order.getId());

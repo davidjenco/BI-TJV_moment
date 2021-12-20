@@ -19,17 +19,17 @@ public class MenuItemDto {
     public boolean alcoholic;
 
     @JsonView(Views.Detailed.class)
-    public Collection<OrderItemDto> orderItemDtos;
+    public Collection<Long> orderIds;
 
     public MenuItemDto() {
     }
 
-    public MenuItemDto(Long id, String name, int price, boolean alcoholic, Collection<OrderItemDto> orderItemDtos) {
+    public MenuItemDto(Long id, String name, int price, boolean alcoholic, Collection<Long> orderIds) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.alcoholic = alcoholic;
-        this.orderItemDtos = orderItemDtos;
+        this.orderIds = orderIds;
     }
 
     public Long getId() {
@@ -48,8 +48,8 @@ public class MenuItemDto {
         return alcoholic;
     }
 
-    public Collection<OrderItemDto> getOrderItemDtos() {
-        return orderItemDtos;
+    public Collection<Long> getOrderIds() {
+        return orderIds;
     }
 
     public void setId(Long id) {
@@ -64,8 +64,8 @@ public class MenuItemDto {
         this.price = price;
     }
 
-    public void setOrderItemDtos(Collection<OrderItemDto> orderItemDtos) {
-        this.orderItemDtos = orderItemDtos;
+    public void setOrderIds(Collection<Long> orderIds) {
+        this.orderIds = orderIds;
     }
 
     public void setAlcoholic(boolean alcoholic) {

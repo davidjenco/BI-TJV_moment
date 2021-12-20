@@ -1,7 +1,9 @@
 package cz.cvut.fit.tjv.moment.api.converter;
 
 import cz.cvut.fit.tjv.moment.api.dtos.MenuItemDto;
+import cz.cvut.fit.tjv.moment.business.OrderService;
 import cz.cvut.fit.tjv.moment.domain.MenuItem;
+import cz.cvut.fit.tjv.moment.domain.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,18 +13,26 @@ import java.util.HashSet;
 @Component
 public class MenuItemConverter {
 
-    private final OrderItemConverter orderItemConverter;
+    private final OrderService orderService;
 
-    public MenuItemConverter(OrderItemConverter orderItemConverter) {
-        this.orderItemConverter = orderItemConverter;
+    public MenuItemConverter(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     public MenuItem toDomain(MenuItemDto menuItemDto){
-        return new MenuItem(Long.MAX_VALUE, menuItemDto.name, menuItemDto.price, menuItemDto.alcoholic, new HashSet<>(orderItemConverter.toDomainMany(menuItemDto.orderItemDtos, null, menuItemDto.id)));
+        Collection<Order> orders = new ArrayList<>();
+        for (Long orderId : menuItemDto.getOrderIds()) {
+            orders.add(orderService.readById(orderId).orElseThrow());
+        }
+        return new MenuItem(Long.MAX_VALUE, menuItemDto.name, menuItemDto.price, menuItemDto.alcoholic, new HashSet<>(orders));
     }
 
     public MenuItemDto fromDomain(MenuItem menuItem){
-        return new MenuItemDto(menuItem.getId(), menuItem.getName(), menuItem.getPrice(), menuItem.isAlcoholic(), orderItemConverter.fromDomainMany(menuItem.getOrdersContainingSuchItem(), false));
+        Collection<Long> orderIds = new ArrayList<>();
+        for (Order order : menuItem.getOrdersContainingSuchItem()) {
+            orderIds.add(order.getId());
+        }
+        return new MenuItemDto(menuItem.getId(), menuItem.getName(), menuItem.getPrice(), menuItem.isAlcoholic(), orderIds);
     }
 
 //    public Collection<MenuItem> toDomainMany(Collection<MenuItemDto> menuItemDtos) {

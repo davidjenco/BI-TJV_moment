@@ -2,15 +2,14 @@ package cz.cvut.fit.tjv.moment.api.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import cz.cvut.fit.tjv.moment.api.converter.OrderConverter;
-import cz.cvut.fit.tjv.moment.api.converter.OrderItemConverter;
 import cz.cvut.fit.tjv.moment.api.dtos.*;
 import cz.cvut.fit.tjv.moment.business.*;
 import cz.cvut.fit.tjv.moment.domain.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 
 
@@ -18,14 +17,12 @@ import java.util.Optional;
 public class OrderController {
     private final OrderService orderService;
     private final BranchService branchService;
-    private final OrderItemService orderItemService;
     private final MenuItemService menuItemService;
     private final OrderConverter orderConverter;
 
-    public OrderController(OrderService orderService, BranchService branchService, OrderItemService orderItemService, MenuItemService menuItemService, OrderConverter orderConverter) {
+    public OrderController(OrderService orderService, BranchService branchService, MenuItemService menuItemService, OrderConverter orderConverter) {
         this.orderService = orderService;
         this.branchService = branchService;
-        this.orderItemService = orderItemService;
         this.menuItemService = menuItemService;
         this.orderConverter = orderConverter;
     }
@@ -68,8 +65,8 @@ public class OrderController {
         orderService.deleteById(id);
     }
 
-    @PutMapping("/orders/{id}/orderItems/{itemId}/amount/{amount}")
-    OrderDto addOrderItem(@PathVariable Long id, @PathVariable Long itemId, @PathVariable Integer amount) throws ElementAlreadyExistsException, CheckCustomerAgeWarningException, LuckyWinException {
+    @PutMapping("/orders/{id}/orderItems/{itemId}")
+    OrderDto addOrderItem(@PathVariable Long id, @PathVariable Long itemId) throws CheckCustomerAgeWarningException, LuckyWinException {
         Order order = orderService.readById(id).orElseThrow();
         MenuItem menuItem = menuItemService.readById(itemId).orElseThrow();
 
@@ -78,15 +75,10 @@ public class OrderController {
             orderService.update(order);
         }
 
-        Optional<OrderItem> orderItemOptional = orderItemService.readById(new OrderItemKey(id, itemId));
-        if (orderItemOptional.isPresent()){
-            OrderItem orderItem = orderItemOptional.get();
-            orderItem.increaseAmount(amount);
-            orderItemService.update(orderItem);
-        }else{
-            OrderItem orderItem = new OrderItem(new OrderItemKey(id, itemId), order, menuItem, amount);
-            orderItemService.create(orderItem);
-        }
+        var originalOrderItems = new HashSet<>(order.getOrderItems());
+        originalOrderItems.add(menuItem);
+        order.setOrderItems(originalOrderItems);
+        orderService.update(order);
 
         return readOne(id);
     }

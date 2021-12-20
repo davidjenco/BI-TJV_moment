@@ -20,8 +20,8 @@ public class Order {
     @ManyToOne
     private Branch branch;
 //    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "myOrder", cascade = CascadeType.REMOVE)
-    private Set<OrderItem> orderItems;
+    @ManyToMany(cascade = CascadeType.REMOVE) //todo nahradit cascade remove na úrovni jpa
+    private Set<MenuItem> orderItems;
     private boolean shouldCheckCustomerAge;
     private OrderState orderState = OrderState.OPEN;
     private boolean isFree = false;
@@ -38,7 +38,7 @@ public class Order {
     }
 
 
-    public Order(Long id, LocalDateTime date, Branch branch, Set<OrderItem> orderItems, boolean shouldCheckCustomerAge, OrderState orderState, boolean isFree) {
+    public Order(Long id, LocalDateTime date, Branch branch, Set<MenuItem> orderItems, boolean shouldCheckCustomerAge, OrderState orderState, boolean isFree) {
         this.id = id;
         this.date = date;
         this.branch = branch;
@@ -48,7 +48,7 @@ public class Order {
         this.isFree = isFree;
     }
 
-    public void addItem(OrderItem item){
+    public void addItem(MenuItem item){
         orderItems.add(item);
     }
 
@@ -64,7 +64,7 @@ public class Order {
         return branch;
     }
 
-    public Set<OrderItem> getOrderItems() {
+    public Set<MenuItem> getOrderItems() {
         return orderItems;
     }
 
@@ -92,7 +92,7 @@ public class Order {
         this.branch = branch;
     }
 
-    public void setOrderItems(Set<OrderItem> orderItems) {
+    public void setOrderItems(Set<MenuItem> orderItems) {
         this.orderItems = orderItems;
     }
 

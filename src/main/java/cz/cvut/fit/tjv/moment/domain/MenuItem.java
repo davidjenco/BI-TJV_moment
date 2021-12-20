@@ -18,8 +18,8 @@ public class MenuItem {
     private int price;
     private boolean alcoholic;
 //    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "menuItem", cascade = CascadeType.REMOVE)
-    private Set<OrderItem> ordersContainingSuchItem;
+    @ManyToMany(mappedBy = "orderItems", cascade = CascadeType.REMOVE)
+    private Set<Order> ordersContainingSuchItem;
 
     public MenuItem() {
     }
@@ -32,7 +32,7 @@ public class MenuItem {
         ordersContainingSuchItem = new HashSet<>();
     }
 
-    public MenuItem(Long id, String name, int price, boolean alcoholic, Set<OrderItem> ordersContainingSuchItem) {
+    public MenuItem(Long id, String name, int price, boolean alcoholic, Set<Order> ordersContainingSuchItem) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -60,7 +60,7 @@ public class MenuItem {
         return alcoholic;
     }
 
-    public Set<OrderItem> getOrdersContainingSuchItem() {
+    public Set<Order> getOrdersContainingSuchItem() {
         return ordersContainingSuchItem;
     }
 
@@ -76,7 +76,7 @@ public class MenuItem {
         this.alcoholic = alcoholic;
     }
 
-    public void setOrdersContainingSuchItem(Set<OrderItem> ordersContainingSuchItem) {
+    public void setOrdersContainingSuchItem(Set<Order> ordersContainingSuchItem) {
         this.ordersContainingSuchItem = ordersContainingSuchItem;
     }
 

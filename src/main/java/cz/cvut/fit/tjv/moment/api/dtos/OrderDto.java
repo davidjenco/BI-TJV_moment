@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import cz.cvut.fit.tjv.moment.domain.OrderState;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -21,7 +20,7 @@ public class OrderDto {
     public Long branchId;
 
     @JsonView(Views.Detailed.class)
-    public Collection<OrderItemDto> orderItemDtos;
+    public Collection<Long> menuItemIds;
 
     @JsonView(Views.Detailed.class)
     public boolean shouldCheckCustomerAge;
@@ -35,11 +34,11 @@ public class OrderDto {
     public OrderDto() {
     }
 
-    public OrderDto(Long id, LocalDateTime date, Long branchId, Collection<OrderItemDto> orderItemDtos, boolean shouldCheckCustomerAge, OrderState orderState, boolean free) {
+    public OrderDto(Long id, LocalDateTime date, Long branchId, Collection<Long> menuItemIds, boolean shouldCheckCustomerAge, OrderState orderState, boolean free) {
         this.id = id;
         this.date = date;
         this.branchId = branchId;
-        this.orderItemDtos = orderItemDtos;
+        this.menuItemIds = menuItemIds;
         this.shouldCheckCustomerAge = shouldCheckCustomerAge;
         this.orderState = orderState;
         this.free = free;
@@ -57,8 +56,8 @@ public class OrderDto {
         return branchId;
     }
 
-    public Collection<OrderItemDto> getOrderItemDtos() {
-        return orderItemDtos;
+    public Collection<Long> getMenuItemIds() {
+        return menuItemIds;
     }
 
     public boolean isShouldCheckCustomerAge() {
@@ -85,8 +84,8 @@ public class OrderDto {
         this.branchId = branchId;
     }
 
-    public void setOrderItemDtos(Collection<OrderItemDto> orderItemDtos) {
-        this.orderItemDtos = orderItemDtos;
+    public void setMenuItemIds(Collection<Long> menuItemIds) {
+        this.menuItemIds = menuItemIds;
     }
 
     public void setShouldCheckCustomerAge(boolean shouldCheckCustomerAge) {
@@ -101,7 +100,7 @@ public class OrderDto {
         this.free = free;
     }
 
-    public void addOrderItem(OrderItemDto orderItemDto){
-        orderItemDtos.add(orderItemDto);
+    public void addOrderItem(Long orderItemId){
+        menuItemIds.add(orderItemId);
     }
 }
