@@ -5,9 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+
 @Repository
 public interface OrderJpaRepository extends JpaRepository<Order, Long> {
-//    @Query("SELECT coalesce(sum(o.amount*m.price), 0) FROM OrderItem o join MenuItem m on (o.id.menuItemId=m.id) where o.id.orderId=:id")
-    @Query("SELECT coalesce(sum(o.orderItems.size), 0) FROM order_db o")
-    int getOrderTotalPrice(Long id);
+    @Query("SELECT coalesce(sum(m.price), 0) FROM MenuItem m where m.id in (:menuItemIds)")
+    int getOrderTotalPrice(Collection<Long> menuItemIds);
 }

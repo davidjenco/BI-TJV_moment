@@ -28,8 +28,8 @@ public class BranchService extends AbstractCrudService<Long, Branch, BranchJpaRe
         int sum = 0;
         Branch branch = repository.getById(id);
         for (Order order : branch.getOrders()) {
-            if (!order.isFree() && order.getOrderState() == OrderState.CLOSED){
-                sum += orderService.getTotalPrice(order.getId());
+            if (!order.isFree() && order.getOrderState() == OrderState.CLOSED && !order.getOrderItems().isEmpty()){
+                sum += orderService.getTotalPrice(order.getOrderItems());
             }
         }
         return sum;
