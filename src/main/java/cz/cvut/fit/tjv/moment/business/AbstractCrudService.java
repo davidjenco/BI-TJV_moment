@@ -49,7 +49,7 @@ public abstract class AbstractCrudService<K, E, REPOSITORY extends JpaRepository
      *
      * @param entity the new state of the entity to be updated; the instance must contain a key value
      */
-    public E update(E entity) throws CheckCustomerAgeWarningException, LuckyWinException {
+    public E update(E entity) {
         if (exists(entity)) {
             return repository.save(entity);
         }

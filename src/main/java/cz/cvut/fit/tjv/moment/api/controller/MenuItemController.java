@@ -5,9 +5,7 @@ import cz.cvut.fit.tjv.moment.api.converter.MenuItemConverter;
 import cz.cvut.fit.tjv.moment.api.dtos.MenuItemDto;
 import cz.cvut.fit.tjv.moment.api.dtos.PriceDto;
 import cz.cvut.fit.tjv.moment.api.dtos.Views;
-import cz.cvut.fit.tjv.moment.business.CheckCustomerAgeWarningException;
 import cz.cvut.fit.tjv.moment.business.ElementAlreadyExistsException;
-import cz.cvut.fit.tjv.moment.business.LuckyWinException;
 import cz.cvut.fit.tjv.moment.business.MenuItemService;
 import cz.cvut.fit.tjv.moment.domain.MenuItem;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +57,7 @@ public class MenuItemController {
     }
 
     @PatchMapping("/menuItems/{id}")
-    MenuItemDto updateMenuItemPrice(@RequestBody PriceDto priceDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
+    MenuItemDto updateMenuItemPrice(@RequestBody PriceDto priceDto, @PathVariable Long id){
         MenuItem menuItem = menuItemService.readById(id).orElseThrow();
         menuItem.setPrice(priceDto.price);
         menuItemService.update(menuItem);

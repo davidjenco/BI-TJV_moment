@@ -51,7 +51,7 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{id}")
-    OrderDto updateOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
+    OrderDto updateOrder(@RequestBody OrderDto orderDto, @PathVariable Long id){
         orderService.readById(id).orElseThrow();
         Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
         Order orderDomain = orderConverter.toDomain(orderDto, branch);
@@ -66,7 +66,7 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{id}/orderItems/{itemId}")
-    OrderDto addOrderItem(@PathVariable Long id, @PathVariable Long itemId) throws CheckCustomerAgeWarningException, LuckyWinException {
+    OrderDto addOrderItem(@PathVariable Long id, @PathVariable Long itemId){
         Order order = orderService.readById(id).orElseThrow();
         MenuItem menuItem = menuItemService.readById(itemId).orElseThrow();
 
@@ -84,7 +84,7 @@ public class OrderController {
     }
 
     @PatchMapping("/orders/{id}")
-    OrderDto updateOrderState(@RequestBody OrderStateDto orderStateDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
+    OrderDto updateOrderState(@RequestBody OrderStateDto orderStateDto, @PathVariable Long id) throws LuckyWinException {
         Order order = orderService.readById(id).orElseThrow();
         if (order.getOrderState() == OrderState.OPEN && orderStateDto.orderState == OrderState.CLOSED){
             order.setOrderState(orderStateDto.orderState);
