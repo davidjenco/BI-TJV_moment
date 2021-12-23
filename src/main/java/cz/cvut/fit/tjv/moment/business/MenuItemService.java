@@ -12,9 +12,4 @@ public class MenuItemService extends AbstractCrudService<Long, MenuItem, MenuIte
     public MenuItemService(MenuItemJpaRepository repository) {
         super(repository);
     }
-
-    @Override
-    public boolean exists(MenuItem entity) {
-        return repository.existsById(entity.getId());
-    }
 }

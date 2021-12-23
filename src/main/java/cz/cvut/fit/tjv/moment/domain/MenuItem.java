@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class MenuItem {
+public class MenuItem implements Identifiable<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menu_item_generator")
     @SequenceGenerator(name = "menu_item_generator", sequenceName = "menu_item_seq", allocationSize = 1)

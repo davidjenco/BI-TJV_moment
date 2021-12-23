@@ -1,5 +1,6 @@
 package cz.cvut.fit.tjv.moment.business;
 
+import cz.cvut.fit.tjv.moment.domain.Identifiable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
@@ -12,7 +13,7 @@ import java.util.Optional;
  * @param <K> Type of (primary) key.
  * @param <E> Type of entity
  */
-public abstract class AbstractCrudService<K, E, REPOSITORY extends JpaRepository<E, K>> {
+public abstract class AbstractCrudService<K, E extends Identifiable<K>, REPOSITORY extends JpaRepository<E, K>> {
     /**
      * Reference to data (persistence) layer.
      */
@@ -28,7 +29,9 @@ public abstract class AbstractCrudService<K, E, REPOSITORY extends JpaRepository
      * @param entity entity to be stored
      */
 
-    public abstract boolean exists(E entity);
+    public boolean exists(E entity){
+        return repository.existsById(entity.getId());
+    }
 
     public E create(E entity) throws ElementAlreadyExistsException {
         if (exists(entity))

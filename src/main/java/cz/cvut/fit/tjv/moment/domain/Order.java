@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity(name = "order_db")
-public class Order {
+public class Order implements Identifiable<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_generator")
     @SequenceGenerator(name = "order_generator", sequenceName = "order_seq", allocationSize = 1)

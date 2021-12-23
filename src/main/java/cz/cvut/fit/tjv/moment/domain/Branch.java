@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Entity
-public class Branch {
+public class Branch implements Identifiable<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branch_generator")
     @SequenceGenerator(name = "branch_generator", sequenceName = "branch_seq", allocationSize = 1)

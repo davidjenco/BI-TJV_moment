@@ -19,11 +19,6 @@ public class BranchService extends AbstractCrudService<Long, Branch, BranchJpaRe
         this.orderService = orderService;
     }
 
-    @Override
-    public boolean exists(Branch entity) {
-        return repository.existsById(entity.getId());
-    }
-
     public int getTotalSales(Long id){
         int sum = 0;
         Branch branch = repository.getById(id);

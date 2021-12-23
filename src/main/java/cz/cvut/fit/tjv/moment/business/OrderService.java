@@ -19,11 +19,6 @@ public class OrderService extends AbstractCrudService<Long, Order, OrderJpaRepos
         super(repository);
     }
 
-    @Override
-    public boolean exists(Order entity) {
-        return repository.existsById(entity.getId());
-    }
-
     public void complementOrder(Order entity) throws LuckyWinException {
         if (exists(entity)) {
             int totalPrice = getTotalPrice(entity.getOrderItems());
