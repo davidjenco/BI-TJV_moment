@@ -24,7 +24,7 @@ public class BranchService extends AbstractCrudService<Long, Branch, BranchJpaRe
         Branch branch = repository.getById(id);
         for (Order order : branch.getOrders()) {
             if (!order.isFree() && order.getOrderState() == OrderState.CLOSED && !order.getOrderItems().isEmpty()){
-                sum += orderService.getTotalPrice(order.getOrderItems());
+                sum += orderService.getTotalPrice(order);
             }
         }
         return sum;

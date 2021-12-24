@@ -21,7 +21,7 @@ public class OrderService extends AbstractCrudService<Long, Order, OrderJpaRepos
 
     public void complementOrder(Order entity) throws LuckyWinException {
         if (exists(entity)) {
-            int totalPrice = getTotalPrice(entity.getOrderItems());
+            int totalPrice = getTotalPrice(entity);
 
             if (entity.getBranch().getLuckyNum() == totalPrice)
                 entity.setFree(true);
@@ -36,7 +36,8 @@ public class OrderService extends AbstractCrudService<Long, Order, OrderJpaRepos
         }
     }
 
-    public int getTotalPrice(Collection<MenuItem> menuItems){
+    public int getTotalPrice(Order order){
+        var menuItems = order.getOrderItems();
         var menuItemIds = new ArrayList<Long>();
         menuItems.forEach((i) -> menuItemIds.add(i.getId()));
         return repository.getOrderTotalPrice(menuItemIds);
