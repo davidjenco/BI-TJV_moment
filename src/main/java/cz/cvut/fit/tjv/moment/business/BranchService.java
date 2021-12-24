@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 
 @Component
 @Transactional
-public class BranchService extends AbstractCrudService<Long, Branch, BranchJpaRepository>{
+public class BranchService extends CrudService<Long, Branch, BranchJpaRepository> {
 
     private final OrderService orderService;
 
