@@ -32,8 +32,8 @@ public class OrderController {
         LocalDateTime now = LocalDateTime.now();
         orderDto.setDate(now);
         Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
-        orderService.create(new Order(orderDto.id, orderDto.date, branch, new HashSet<>(), orderDto.shouldCheckCustomerAge, orderDto.orderState, orderDto.free));
-        return orderDto;
+        Order returnedOrder = orderService.create(new Order(Long.MAX_VALUE, orderDto.date, branch, new HashSet<>(), orderDto.shouldCheckCustomerAge, orderDto.orderState, orderDto.free));
+        return orderConverter.fromDomain(returnedOrder);
     }
 
     @JsonView(Views.Detailed.class)

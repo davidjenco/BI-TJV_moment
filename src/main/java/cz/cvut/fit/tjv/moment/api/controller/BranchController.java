@@ -31,8 +31,8 @@ public class BranchController {
     @PostMapping("/branches")
     BranchDto createBranch(@RequestBody BranchDto branchDto) throws ElementAlreadyExistsException {
         //protože tady je requestBody, tak ta utilita vezme tu zprávu (u nás ve formátu JSON) a pokusí se ji převést na ten BranchDto
-        branchService.create(new Branch(branchDto.id, branchDto.luckyNum, new HashSet<>()));
-        return branchDto;
+        Branch returnedBranch = branchService.create(new Branch(Long.MAX_VALUE, branchDto.luckyNum, new HashSet<>()));
+        return branchConverter.fromDomain(returnedBranch);
     }
 
     @JsonView(Views.Detailed.class)

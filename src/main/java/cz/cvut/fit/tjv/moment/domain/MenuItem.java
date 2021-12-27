@@ -17,8 +17,8 @@ public class MenuItem implements Identifiable<Long>{
     private String name;
     private int price;
     private boolean alcoholic;
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-    @ManyToMany(mappedBy = "orderItems", cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToMany(mappedBy = "orderItems")
     private Set<Order> ordersContainingSuchItem;
 
     public MenuItem() {

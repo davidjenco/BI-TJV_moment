@@ -25,8 +25,8 @@ public class MenuItemController {
 
     @PostMapping("/menuItems")
     MenuItemDto createMenuItem(@RequestBody MenuItemDto menuItemDto) throws ElementAlreadyExistsException {
-        menuItemService.create(new MenuItem(menuItemDto.id, menuItemDto.name, menuItemDto.price, menuItemDto.alcoholic, new HashSet<>()));
-        return menuItemDto;
+        MenuItem returnedMenuItem = menuItemService.create(new MenuItem(Long.MAX_VALUE, menuItemDto.name, menuItemDto.price, menuItemDto.alcoholic, new HashSet<>()));
+        return menuItemConverter.fromDomain(returnedMenuItem);
     }
 
     @JsonView(Views.Detailed.class)

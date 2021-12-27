@@ -19,8 +19,8 @@ public class Order implements Identifiable<Long>{
     private LocalDateTime date;
     @ManyToOne
     private Branch branch;
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-    @ManyToMany(cascade = CascadeType.REMOVE) //todo nahradit cascade remove na úrovni jpa
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToMany
     @JoinTable(name = "order_item",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "menu_item_id"))
