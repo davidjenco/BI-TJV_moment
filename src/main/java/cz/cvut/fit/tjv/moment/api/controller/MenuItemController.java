@@ -11,6 +11,7 @@ import cz.cvut.fit.tjv.moment.domain.MenuItem;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 @RestController
 public class MenuItemController {
@@ -24,9 +25,8 @@ public class MenuItemController {
 
     @PostMapping("/menuItems")
     MenuItemDto createMenuItem(@RequestBody MenuItemDto menuItemDto) throws ElementAlreadyExistsException {
-        MenuItem menuItemDomain = menuItemConverter.toDomain(menuItemDto);
-        MenuItem returnedMenuItem = menuItemService.create(menuItemDomain);
-        return menuItemConverter.fromDomain(returnedMenuItem);
+        menuItemService.create(new MenuItem(menuItemDto.id, menuItemDto.name, menuItemDto.price, menuItemDto.alcoholic, new HashSet<>()));
+        return menuItemDto;
     }
 
     @JsonView(Views.Detailed.class)

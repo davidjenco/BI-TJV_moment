@@ -59,10 +59,6 @@ public class Branch implements Identifiable<Long>{
         luckyNum = rand - rand % 10;
     }
 
-    public void addOrder(Order order){
-        orders.add(order);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

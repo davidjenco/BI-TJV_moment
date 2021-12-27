@@ -1,5 +1,6 @@
 package cz.cvut.fit.tjv.moment.business;
 
+import cz.cvut.fit.tjv.moment.dao.BranchJpaRepository;
 import cz.cvut.fit.tjv.moment.dao.OrderJpaRepository;
 import cz.cvut.fit.tjv.moment.domain.Order;
 import org.springframework.stereotype.Component;
@@ -12,21 +13,24 @@ import java.util.NoSuchElementException;
 @Transactional
 public class OrderService extends CrudService<Long, Order, OrderJpaRepository> {
 
-    protected OrderService(OrderJpaRepository repository) {
+    private final BranchJpaRepository branchJpaRepository;
+
+    protected OrderService(OrderJpaRepository repository, BranchJpaRepository branchJpaRepository) {
         super(repository);
+        this.branchJpaRepository = branchJpaRepository;
     }
 
     public void complementOrder(Order entity) throws LuckyWinException {
         if (exists(entity)) {
             int totalPrice = getTotalPrice(entity);
 
-            if (entity.getBranch().getLuckyNum() == totalPrice)
+            if (entity.getBranch().getLuckyNum() == totalPrice){
                 entity.setFree(true);
-            if (entity.isFree()){
-                entity.getBranch().updateLuckyNum(); //TODO should save?
+                entity.getBranch().updateLuckyNum();
+                repository.save(entity);
+                branchJpaRepository.save(entity.getBranch());
                 throw new LuckyWinException();
             }
-//            repository.save(entity);
         }
         else {
             throw new NoSuchElementException("No such element to update.");

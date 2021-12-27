@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 @RestController //@Component inside
 public class BranchController {
@@ -30,9 +31,8 @@ public class BranchController {
     @PostMapping("/branches")
     BranchDto createBranch(@RequestBody BranchDto branchDto) throws ElementAlreadyExistsException {
         //protože tady je requestBody, tak ta utilita vezme tu zprávu (u nás ve formátu JSON) a pokusí se ji převést na ten BranchDto
-        Branch branchDomain = branchConverter.toDomain(branchDto);
-        Branch returnedBranch = branchService.create(branchDomain);
-        return branchConverter.fromDomain(returnedBranch);
+        branchService.create(new Branch(branchDto.id, branchDto.luckyNum, new HashSet<>()));
+        return branchDto;
     }
 
     @JsonView(Views.Detailed.class)
