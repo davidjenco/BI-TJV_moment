@@ -27,24 +27,22 @@ class OrderJpaRepositoryTest {
     @Autowired
     private BranchJpaRepository branchJpaRepository;
 
-    private MenuItem menuItem1;
-    private MenuItem menuItem2;
-    private MenuItem menuItem3;
     private Order order;
-    private Branch branch;
 
     @Test
-    void getOrderTotalPrice() {
+    void testGetOrderTotalPrice() {
 
-        menuItem1 = new MenuItem(1L, "cappuco", 40, false, new HashSet<>(Arrays.asList(order)));
-        menuItem2 = new MenuItem(2L, "latte", 60, false, new HashSet<>(Arrays.asList(order)));
-        menuItem3 = new MenuItem(3L, "baileys", 80, true, new HashSet<>(Arrays.asList(order)));
-        branch = new Branch(1L, 140, new HashSet<>(Arrays.asList(order)));
+        MenuItem menuItem1 = new MenuItem(1L, "cappuco", 40, false, new HashSet<>(Arrays.asList(order)));
+        MenuItem menuItem2 = new MenuItem(2L, "latte", 60, false, new HashSet<>(Arrays.asList(order)));
+        MenuItem menuItem3 = new MenuItem(3L, "baileys", 80, true, new HashSet<>(Arrays.asList(order)));
+        MenuItem menuItemNotIncluded = new MenuItem(4L, "sandwich", 50, false, new HashSet<>());
+        Branch branch = new Branch(1L, 140, new HashSet<>(Arrays.asList(order)));
         order = new Order(1L, LocalDateTime.now(), branch, new HashSet<>(Arrays.asList(menuItem1, menuItem2, menuItem3)),
                 false, OrderState.CLOSED, false);
         menuItemJpaRepository.save(menuItem1);
         menuItemJpaRepository.save(menuItem2);
         menuItemJpaRepository.save(menuItem3);
+        menuItemJpaRepository.save(menuItemNotIncluded);
         branchJpaRepository.save(branch);
         orderJpaRepository.save(order);
 
