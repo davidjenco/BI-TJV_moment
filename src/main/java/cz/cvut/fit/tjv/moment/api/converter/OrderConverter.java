@@ -25,7 +25,7 @@ public class OrderConverter {
         for (Long menuItemId : orderDto.getMenuItemIds()) {
             menuItems.add(menuItemService.readById(menuItemId).orElseThrow());
         }
-        return new Order(Long.MAX_VALUE, orderDto.date, branch, new HashSet<>(menuItems), orderDto.shouldCheckCustomerAge, orderDto.orderState, orderDto.free);
+        return new Order(orderDto.id, orderDto.date, branch, new HashSet<>(menuItems), orderDto.shouldCheckCustomerAge, orderDto.orderState, orderDto.free);
     }
 
     public OrderDto fromDomain(Order order){

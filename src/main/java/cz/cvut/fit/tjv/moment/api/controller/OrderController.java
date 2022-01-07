@@ -49,16 +49,6 @@ public class OrderController {
         return orderConverter.fromDomainMany(orderService.readAll());
     }
 
-    @PutMapping("/orders/{id}")
-    OrderDto updateOrder(@RequestBody OrderDto orderDto, @PathVariable Long id){
-        orderService.readById(id).orElseThrow();
-        Branch branch = branchService.readById(orderDto.branchId).orElseThrow();
-        Order orderDomain = orderConverter.toDomain(orderDto, branch);
-        orderService.update(orderDomain);
-
-        return orderDto;
-    }
-
     @DeleteMapping("/orders/{id}")
     void deleteOrder(@PathVariable Long id){
         orderService.deleteById(id);

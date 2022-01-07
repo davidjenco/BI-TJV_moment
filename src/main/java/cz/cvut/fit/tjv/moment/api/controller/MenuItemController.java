@@ -42,14 +42,14 @@ public class MenuItemController {
         return menuItemConverter.fromDomainMany(menuItemService.readAll());
     }
 
-//    @PutMapping("/menuItems/{id}")
-//    MenuItemDto updateMenuItem(@RequestBody MenuItemDto menuItemDto, @PathVariable Long id) throws CheckCustomerAgeWarningException, LuckyWinException {
-//        menuItemService.readById(id).orElseThrow();
-//        MenuItem menuItemDomain = menuItemConverter.toDomain(menuItemDto);
-//        menuItemService.update(menuItemDomain);
-//
-//        return menuItemDto;
-//    }
+    @PutMapping("/menuItems/{id}")
+    MenuItemDto updateMenuItem(@RequestBody MenuItemDto menuItemDto, @PathVariable Long id) {
+        menuItemService.readById(id).orElseThrow();
+        MenuItem menuItemDomain = menuItemConverter.toDomain(menuItemDto);
+        menuItemService.update(menuItemDomain);
+
+        return menuItemDto;
+    }
 
     @DeleteMapping("/menuItems/{id}")
     void deleteMenuItem(@PathVariable Long id){

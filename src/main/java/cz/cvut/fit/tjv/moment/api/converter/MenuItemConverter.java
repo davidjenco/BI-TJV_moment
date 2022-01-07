@@ -24,7 +24,7 @@ public class MenuItemConverter {
         for (Long orderId : menuItemDto.getOrderIds()) {
             orders.add(orderService.readById(orderId).orElseThrow());
         }
-        return new MenuItem(Long.MAX_VALUE, menuItemDto.name, menuItemDto.price, menuItemDto.alcoholic, new HashSet<>(orders));
+        return new MenuItem(menuItemDto.id, menuItemDto.name, menuItemDto.price, menuItemDto.alcoholic, new HashSet<>(orders));
     }
 
     public MenuItemDto fromDomain(MenuItem menuItem){

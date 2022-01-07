@@ -26,7 +26,7 @@ public class BranchConverter {
         for (Long orderId : branchDto.ordersIds) {
             orders.add(orderService.readById(orderId).orElseThrow());
         }
-        return new Branch(Long.MAX_VALUE, branchDto.luckyNum, new HashSet<>(orders));
+        return new Branch(branchDto.id, branchDto.luckyNum, new HashSet<>(orders));
     }
 
     public BranchDto fromDomain(Branch branch){
