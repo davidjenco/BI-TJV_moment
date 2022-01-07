@@ -15,3 +15,11 @@ Semestral project for BI-TJV class
 <p>- Je potřeba spustit postgres databázi na portu 5432, heslo: "password" (usename: "postgres")</p>
 <p>  nebo pomocí docker-compose up</p></p>
 <p>https://www.getpostman.com/collections/d083d8d09fd5b5c49c8d</p>
+<br></br>
+
+<h3>3. kontrolní bod:</h2>
+<p>- Napsané testy</p>
+<p>- Funkční CI a docker compose</p>
+<p>- Změna v entitách (m:n vazba není dekomponovaná manuálně)</p>
+<p>- (Kolekce v Postman se tedy také měnila, kdyby byla náhodou potřeba)</p>
+<p>https://www.getpostman.com/collections/51950f63c5e2529a5cfd</p>
