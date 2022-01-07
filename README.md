@@ -21,5 +21,6 @@ Semestral project for BI-TJV class
 <p>- Napsané testy</p>
 <p>- Funkční CI a docker compose</p>
 <p>- Změna v entitách (m:n vazba není dekomponovaná manuálně)</p>
+<p>- Přikládám i krátký insert script pro databázi, který jsem často používal, abych nemusel dokola vytvářet pár počátečních entit</p>
 <p>- (Kolekce v Postman se tedy také měnila, kdyby byla náhodou potřeba)</p>
 <p>https://www.getpostman.com/collections/51950f63c5e2529a5cfd</p>
