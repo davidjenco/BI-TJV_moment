@@ -24,3 +24,4 @@ Semestral project for BI-TJV class
 <p>- Přikládám i krátký insert script pro databázi, který jsem často používal, abych nemusel dokola vytvářet pár počátečních entit</p>
 <p>- (Kolekce v Postman se tedy také měnila, kdyby byla náhodou potřeba)</p>
 <p>https://www.getpostman.com/collections/51950f63c5e2529a5cfd</p>
+<p>- Klient mé semestrální práci je v repozitáři "TJV - moment_client", do kterého jsem Vás taky přidal s rolí Reporter</p>
