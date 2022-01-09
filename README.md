@@ -25,3 +25,10 @@ Semestral project for BI-TJV class
 <p>- (Kolekce v Postman se tedy také měnila, kdyby byla náhodou potřeba)</p>
 <p>https://www.getpostman.com/collections/51950f63c5e2529a5cfd</p>
 <p>- Klient mé semestrální práci je v repozitáři "TJV - moment_client", do kterého jsem Vás taky přidal s rolí Reporter</p>
+<br></br>
+
+<h3>Příběh k semestrálce:</h2>
+<p>Jedná se o backend k vytváření objednávek v nějaké nejmenované kavárně. Můžeme mít více poboček, každá pobočka pod sebou eviduje své objednávky, kde každá objednávka obsahuje jednu či více položek z nabídky. Každá pobočka má své "šťastné číslo", pokud je při uzavření objednávky celková cena objednávky rovna tomuto číslu, zákazník má objednávku zdarma a útrata jde na účet podniku. Pokud se toto stane, pobočce je vygenerované nové "šťastné číslo".</p>
+
+
+![alt text](img/diagram.png "Model diagram")

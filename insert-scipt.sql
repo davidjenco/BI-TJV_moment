@@ -7,5 +7,7 @@ insert into menu_item (id, name, price, alcoholic) values (6, 'Water', 10, false
 insert into menu_item (id, name, price, alcoholic) values (7, 'Baileys', 60, true);
 insert into menu_item (id, name, price, alcoholic) values (8, 'Juice', 30, false);
 insert into menu_item (id, name, price, alcoholic) values (9, 'Wafle', 50, false);
+select setval('menu_item_seq', 9);
 
 insert into branch (id, lucky_num) values (1, 100);
+select setval('branch_seq', 1);
